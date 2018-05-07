@@ -1,0 +1,89 @@
+<!--
+  Generated template for the NoteCreatePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary2">
+    <ion-title *ngIf="isNew">{{ 'NEW_NOTE_TITLE' | translate }}</ion-title>
+    <ion-title *ngIf="!isNew">{{ 'EDIT_NOTE_TITLE' | translate }}</ion-title>
+    <ion-buttons start showWhen="core,android,windows">
+      <button ion-button (click)="cancel()">{{ 'CLOSE_BUTTON' | translate }}</button>
+    </ion-buttons>
+    <ion-buttons start showWhen="ios">
+      <button ion-button (click)="cancel()">
+        <span color="primary">
+          {{ 'CANCEL_BUTTON' | translate }}
+        </span>
+      </button>
+    </ion-buttons>
+    <ion-buttons end showWhen="ios">
+      <button ion-button (click)="done()" [disabled]="!isReadyToSave" strong>
+        <span color="primary">
+          {{ 'DONE_BUTTON' | translate }}
+        </span>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <form *ngIf="form" [formGroup]="form">
+
+      <ion-item>
+        <ion-label floating>{{ 'NOTE_MEAL_NAME' | translate }}</ion-label>
+        <ion-input type="text" placeholder="" formControlName="meal"></ion-input>
+      </ion-item>
+
+      <ion-fab id="add-ingredient-btn2">
+        <button ion-fab mini color="secondary2" (click)="addIngredient()">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-fab>
+
+      <div id="ingredients-chips">
+        <ion-chip #chip *ngFor="let ingredient of note.ingredients">
+          <ion-label>{{ingredient.name}}</ion-label>
+          <button ion-button clear color="light" (click)="deleteIngredient(chip, ingredient.name)">
+            <ion-icon name="close-circle"></ion-icon>
+          </button>
+        </ion-chip>
+      </div>
+
+      <div>
+        <ion-item id="add-ingredient">
+          <ion-label floating>{{ 'NOTE_MEAL_INGREDIENTS' | translate }}</ion-label>
+          <ion-input type="text" placeholder="" formControlName="ingredients" [(ngModel)]="ingredient"></ion-input>
+        </ion-item>
+
+        <ion-fab id="add-ingredient-btn">
+          <button ion-fab mini color="danger" (click)="addIngredient()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-fab>
+      </div>
+
+      <ion-item>
+        <ion-label floating>{{ 'NOTE_MEAL_DATE' | translate }}</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" formControlName="date"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ 'NOTE_MEAL_BAD' | translate }}</ion-label>
+        <ion-checkbox color="danger" formControlName="bad"></ion-checkbox>
+      </ion-item>
+
+  </form>
+
+</ion-content>
+
+<ion-footer showWhen="core,android,windows">
+
+  <button ion-button icon-only clear full (click)="done()" [disabled]="!isReadyToSave">
+    <ion-icon name="checkmark" color="primary2"></ion-icon>
+  </button>
+
+</ion-footer>

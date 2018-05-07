@@ -1,0 +1,35 @@
+ion-row {
+  border-bottom: 1px solid #dedede;
+}
+
+.ingredients {
+  display: inline-table !important;
+  width: 90% !important;
+}
+
+.rank {
+  display: flex !important;
+}
+
+ion-fab {
+  position: absolute;
+  margin: 0;
+  top: .5em;
+  right: .5em;
+}
+
+.fab[mini] {
+  margin: 0;
+}
+
+.col {
+  min-height: 3.9em !important;
+}
+
+ion-chip {
+  margin-right: .5em !important;
+}
+
+ion-badge {
+  font-weight: normal !important;
+}

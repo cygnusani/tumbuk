@@ -13,8 +13,11 @@ $font-path: "../assets/fonts";
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
 $text-color:        #000;
-$background-color:  #fff;
+$background-color:  #FEFAEC; // #fff;
 
+$text-input-highlight-color-valid: #999;
+$text-input-highlight-color-invalid: #FF5D5D;
+$text-input-placeholder-color: #999;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -26,10 +29,14 @@ $background-color:  #fff;
 
 $colors: (
   primary:    #488aff,
-  secondary:  #32db64,
-  danger:     #f53d3d,
+  secondary:  #04DEAD,
+  danger:     #FF5D5D, // #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  primary2:   #625772,
+  secondary2: #F9A1BC,
+  light2:     #FEFAEC,
+  light3:     #A9EEE6
 );
 
 

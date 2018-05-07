@@ -1,0 +1,29 @@
+<!--
+  Generated template for the StatisticsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-grid>
+    <ion-row *ngFor="let stat of statistics">
+      <ion-col class="ingredients">
+        <ion-chip *ngFor="let ingredient of stat.ingredients" color="light3">
+          <ion-label>{{ingredient}}</ion-label>
+        </ion-chip>
+      </ion-col>
+      <ion-col class="rank">
+        <ion-fab>
+          <button ion-fab mini color="secondary2">{{stat.count}}</button>
+        </ion-fab>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
