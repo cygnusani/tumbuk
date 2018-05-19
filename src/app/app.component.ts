@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { TranslateService } from '@ngx-translate/core';
-import { Config, Platform } from 'ionic-angular';
-
+import { Platform } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import { FirstRunPage } from '../pages/pages';
-import { NotesProvider } from '../providers/notes/notes';
-import { StatisticsProvider } from '../providers/statistics/statistics';
 
 
 @Component({
@@ -14,41 +13,29 @@ import { StatisticsProvider } from '../providers/statistics/statistics';
 })
 
 export class MyApp {
+
   rootPage = FirstRunPage;
 
-  constructor(private translate: TranslateService, platform: Platform, notesProv: NotesProvider, statisticsProv: StatisticsProvider, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
+  constructor(storage: Storage, translate: TranslateService, platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, screenOrientation: ScreenOrientation) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      screenOrientation.lock(screenOrientation.ORIENTATIONS.PORTRAIT);
+
+      // set status bar to dark purple
+      statusBar.backgroundColorByHexString('#443c50');
+
+      //splashScreen.hide();
     });
-    this.initTranslate();
-  }
 
-  initTranslate() {
-    // Set the default language for translation strings, and the current language.
-    this.translate.setDefaultLang('en');
-    const browserLang = this.translate.getBrowserLang();
+    translate.setDefaultLang('est')
 
-    if (browserLang) {
-      if (browserLang === 'zh') {
-        const browserCultureLang = this.translate.getBrowserCultureLang();
-
-        if (browserCultureLang.match(/-CN|CHS|Hans/i)) {
-          this.translate.use('zh-cmn-Hans');
-        } else if (browserCultureLang.match(/-TW|CHT|Hant/i)) {
-          this.translate.use('zh-cmn-Hant');
-        }
+    storage.get('lang').then(val => {
+      if (val) {
+        translate.use(val)
       } else {
-        this.translate.use(this.translate.getBrowserLang());
+        storage.set('lang', 'en');
       }
-    } else {
-      this.translate.use('en'); // Set your language here
-    }
-
-    this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
-      this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
-    });
+    })
   }
 }

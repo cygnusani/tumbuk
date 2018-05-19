@@ -7,20 +7,43 @@
 <ion-content>
 
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
-    </ion-refresher-content>
+    <ion-refresher-content pullingIcon="arrow-round-down" pullingText="{{ 'REFRESHER_PULLING_TEXT' | translate }}" refreshingSpinner="dots"
+      refreshingText="{{ 'REFRESHING_TEXT' | translate }}"> </ion-refresher-content>
   </ion-refresher>
+
+  <ion-item id="symptoms-filter" *ngIf="symptoms.length > 0">
+    <ion-label>{{ 'SYMPTOMS_FILTER_LABEL' | translate }}</ion-label>
+    <ion-select okText="{{ 'APPLY_FILTER_BUTTON' | translate }}" cancelText="{{ 'CANCEL_BUTTON' | translate }}" (ionChange)="applySymtomsFilter($event)">
+      <ion-option value="" selected="true">{{ 'ALL_SYMPTOMS_RADIO' | translate }}</ion-option>
+      <ion-option *ngFor="let s of symptoms" value="{{s.name}}">{{s.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <div class="nothing" *ngIf="statistics.length == 0">
+    <ion-icon name="happy" color="primary"></ion-icon>
+    <h2>{{ 'NO_STATISTICS_MESSAGE' | translate }}</h2>
+    <p>{{ 'NO_STATISTICS_MESSAGE_2' | translate }}</p>
+  </div>
+
+  <ion-item class="something" *ngIf="statistics.length > 0">
+    <ion-icon name="sad" color="danger"></ion-icon>
+    <h2>{{ 'STATISTICS_MESSAGE' | translate }}</h2>
+    <p>{{ 'STATISTICS_MESSAGE_2' | translate }}</p>
+  </ion-item>
 
   <ion-grid>
     <ion-row *ngFor="let stat of statistics">
       <ion-col class="ingredients">
-        <ion-chip *ngFor="let ingredient of stat.ingredients" color="light3">
+        <ion-chip *ngFor="let ingredient of stat.ingredients">
           <ion-label>{{ingredient}}</ion-label>
         </ion-chip>
       </ion-col>
       <ion-col class="rank">
         <ion-fab>
-          <button ion-fab mini color="secondary2">{{stat.count}}</button>
+          <button ion-fab mini *ngIf="statistics.indexOf(stat)==0" color="danger">{{stat.count}}</button>
+          <button ion-fab mini [hidden]="statistics.length < 2" *ngIf="statistics.indexOf(stat)==1" color="danger_2">{{stat.count}}</button>
+          <button ion-fab mini [hidden]="statistics.length < 3" *ngIf="statistics.indexOf(stat)==2" color="danger_3">{{stat.count}}</button>
+          <button ion-fab mini [hidden]="statistics.length < 4" *ngIf="statistics.indexOf(stat)>=3" color="primary_dark">{{stat.count}}</button>
         </ion-fab>
       </ion-col>
     </ion-row>

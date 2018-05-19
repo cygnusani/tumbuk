@@ -1,0 +1,22 @@
+.symptom {
+  width: auto;
+  margin-left: 2em;
+  right: 1em;
+}
+
+#add-symptom-field {
+  padding-right: 5em;
+}
+
+#add-symptom-btn {
+  position: relative;
+  top: -3em;
+  right: 1em;
+  float: right;
+}
+
+// Delete icon
+.item-md .item-button[icon-only] {
+  padding: 0 1px;
+  margin-right: 0;
+}

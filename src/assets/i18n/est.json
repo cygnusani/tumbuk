@@ -1,0 +1,65 @@
+{
+  "REFRESHER_PULLING_TEXT": "Tõmba värskendamiseks",
+  "REFRESHING_TEXT": "Värskendan...",
+
+  "LOADING_MESSAGE": "Palun oodake...",
+  "OK": "Ok",
+
+  "SYMPTOMS_FILTER_LABEL": "Filtreeri sümptomi järgi",
+  "ALL_SYMPTOMS_RADIO": "Kõik",
+  "APPLY_FILTER_BUTTON": "Filtreeri",
+
+  "NO_STATISTICS_MESSAGE": "Statistika puudub",
+  "NO_STATISTICS_MESSAGE_2": "Siis on ju kõik hästi, eks?",
+
+  "STATISTICS_MESSAGE": "Tohoo!",
+  "STATISTICS_MESSAGE_2": "Need võivad olla teie ärritajad",
+
+  "NO_NOTES_MESSAGE": "Märkmed puuduvad",
+  "NO_NOTES_MESSAGE_2": "Alustuseks lisa neid alt paremast nurgast",
+
+  "NEW_NOTE_TITLE": "Uus märge",
+  "EDIT_NOTE_TITLE": "Muuda märget",
+
+  "ERROR_INGREDIENT_EMPTY": "Sisestage valiidne koostisosa",
+  "ERROR_ONE_INGREDIENT": "Sisestage vähemalt 1 koostisosa",
+  "ERROR_INGREDIENT_EXISTS": "Selline koostisosa on juba olemas",
+
+  "NOTE_MEAL_NAME_LABEL": "Nimi",
+  "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Koostisosad...",
+  "NOTE_MEAL_DATE_LABEL": "Kuupäev",
+  "NOTE_MEAL_SYMPTOMS_LABEL": "Sümptomid",
+  "NOTE_ADD_SYMPTOMS": "Lisa",
+  "NOTE_CANCEL_SYMPTOMS": "Tühista",
+  "CLOSE_BUTTON": "Sulge",
+
+  "SYMPTOMS_TITLE": "Muuda sümptomeid",
+  "SYMPTOMS_DONE_BUTTON": "Valmis",
+  "SYMPTOMS_ADD_SYMPTOM_PLACEHOLDER": "Lisa sümptomeid...",
+  "TOAST_DELETE_SYMPTOM_SUCCESS": "Sümptom edukalt kustutatud!",
+  "TOAST_ERROR_NOTE_DEPENDENCY": "Kustutamine ebaõnnestus! Eemaldage kõik vastava sümptomi sõltuvused ja proovige uuesti.",
+
+  "DELETE_NOTE_ALERT_TITLE": "Kustuta valitud märge?",
+  "DELETE_NOTE_ALERT_MESSAGE": "Vastavat valikut ei saa tagasi võtta",
+  "DELETE_BUTTON": "Kustuta",
+  "CANCEL_BUTTON": "Tühista",
+
+  "CREATE_NOTE_SUCCESS_TOAST": "Märge edukalt loodud!",
+  "EDIT_NOTE_SUCCESS_TOAST": "Märge edukalt muudetud!",
+  "DELETE_NOTE_SUCCESS_TOAST": "Märge edukalt kustutatud!",
+  "ERROR_TOAST": "Oih! Midagi läks valesti.",
+
+  "TAB1_TITLE": "Statistika",
+  "TAB2_TITLE": "Märkmed",
+  "TAB3_TITLE": "Sätted",
+
+  "LANGUAGE_LABEL": "Keel",
+  "LANGUAGE_EST": "Eesti",
+  "LANGUAGE_ENG": "Inglise",
+  "ABOUT_THIS_APP_BUTTON": "Rakendusest",
+
+  "ABOUT_TITLE": "Rakendusest",
+  "APP_NAME": "Tumbuk",
+  "DEVELOPER": "Autor: Martin Luik",
+  "APP_VERSION": "Rakenduse versioon: "
+}

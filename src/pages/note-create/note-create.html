@@ -6,21 +6,21 @@
 -->
 <ion-header>
 
-  <ion-navbar color="primary2">
+  <ion-navbar color="primary_dark" no-border>
     <ion-title *ngIf="isNew">{{ 'NEW_NOTE_TITLE' | translate }}</ion-title>
     <ion-title *ngIf="!isNew">{{ 'EDIT_NOTE_TITLE' | translate }}</ion-title>
     <ion-buttons start showWhen="core,android,windows">
-      <button ion-button (click)="cancel()">{{ 'CLOSE_BUTTON' | translate }}</button>
+      <button ion-button tappable (click)="cancel()">{{ 'CLOSE_BUTTON' | translate }}</button>
     </ion-buttons>
     <ion-buttons start showWhen="ios">
-      <button ion-button (click)="cancel()">
+      <button ion-button tappable (click)="cancel()">
         <span color="primary">
           {{ 'CANCEL_BUTTON' | translate }}
         </span>
       </button>
     </ion-buttons>
     <ion-buttons end showWhen="ios">
-      <button ion-button (click)="done()" [disabled]="!isReadyToSave" strong>
+      <button ion-button tappable (click)="done()" [disabled]="!isReadyToSave" strong>
         <span color="primary">
           {{ 'DONE_BUTTON' | translate }}
         </span>
@@ -34,56 +34,68 @@
 
   <form *ngIf="form" [formGroup]="form">
 
-      <ion-item>
-        <ion-label floating>{{ 'NOTE_MEAL_NAME' | translate }}</ion-label>
-        <ion-input type="text" placeholder="" formControlName="meal"></ion-input>
+    <ion-item>
+      <ion-label floating>{{ 'NOTE_MEAL_NAME_LABEL' | translate }}</ion-label>
+      <ion-input type="text" formControlName="meal" tappable></ion-input>
+    </ion-item>
+
+    <ion-fab id="add-ingredient-btn2">
+      <button ion-fab mini color="secondary2" tappable (click)="addIngredient()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+
+    <div id="ingredients-chips">
+      <ion-chip #chip *ngFor="let ingredient of note.ingredients">
+        <ion-label>{{ingredient.name}}</ion-label>
+        <button ion-button clear color="light" tappable (click)="deleteIngredient(chip, ingredient.name)">
+          <ion-icon name="close-circle"></ion-icon>
+        </button>
+      </ion-chip>
+    </div>
+
+    <div>
+      <ion-item id="add-ingredient">
+        <ion-label floating>{{ 'NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER' | translate }}</ion-label>
+        <ion-input type="text" formControlName="ingredients" [(ngModel)]="ingredient" tappable></ion-input>
       </ion-item>
 
-      <ion-fab id="add-ingredient-btn2">
-        <button ion-fab mini color="secondary2" (click)="addIngredient()">
+      <ion-fab id="add-ingredient-btn">
+        <button ion-fab mini color="primary_dark" tappable (click)="addIngredient()">
           <ion-icon name="add"></ion-icon>
         </button>
       </ion-fab>
+    </div>
 
-      <div id="ingredients-chips">
-        <ion-chip #chip *ngFor="let ingredient of note.ingredients">
-          <ion-label>{{ingredient.name}}</ion-label>
-          <button ion-button clear color="light" (click)="deleteIngredient(chip, ingredient.name)">
-            <ion-icon name="close-circle"></ion-icon>
-          </button>
-        </ion-chip>
-      </div>
-
-      <div>
-        <ion-item id="add-ingredient">
-          <ion-label floating>{{ 'NOTE_MEAL_INGREDIENTS' | translate }}</ion-label>
-          <ion-input type="text" placeholder="" formControlName="ingredients" [(ngModel)]="ingredient"></ion-input>
-        </ion-item>
-
-        <ion-fab id="add-ingredient-btn">
-          <button ion-fab mini color="danger" (click)="addIngredient()">
-            <ion-icon name="add"></ion-icon>
-          </button>
-        </ion-fab>
-      </div>
-
-      <ion-item>
-        <ion-label floating>{{ 'NOTE_MEAL_DATE' | translate }}</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" formControlName="date"></ion-datetime>
+    <div>
+      <ion-item id="edit-symptoms">
+        <ion-label>{{ 'NOTE_MEAL_SYMPTOMS_LABEL' | translate }}</ion-label>
+        <ion-select multiple="true" okText="{{ 'NOTE_ADD_SYMPTOMS' | translate }}" cancelText="{{ 'NOTE_CANCEL_SYMPTOMS' | translate }}"
+          formControlName="symptoms" tappable [(ngModel)]="symptomsInNote" okText="Okay text" cancelText="Dismiss text">
+          <ion-option *ngFor="let s of symptoms">{{s.name}}</ion-option>
+        </ion-select>
       </ion-item>
-      <ion-item>
-        <ion-label>{{ 'NOTE_MEAL_BAD' | translate }}</ion-label>
-        <ion-checkbox color="danger" formControlName="bad"></ion-checkbox>
-      </ion-item>
+
+      <ion-fab id="edit-symptoms-btn">
+        <button ion-fab mini color="primary_dark" tappable (click)="editSymptoms()">
+          <ion-icon name="create"></ion-icon>
+        </button>
+      </ion-fab>
+    </div>
+
+    <ion-item>
+      <ion-label floating>{{ 'NOTE_MEAL_DATE_LABEL' | translate }}</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" tappable formControlName="date"></ion-datetime>
+    </ion-item>
 
   </form>
 
 </ion-content>
 
-<ion-footer showWhen="core,android,windows">
+<ion-footer showWhen="core,android,windows" no-border>
 
-  <button ion-button icon-only clear full (click)="done()" [disabled]="!isReadyToSave">
-    <ion-icon name="checkmark" color="primary2"></ion-icon>
+  <button ion-button icon-only clear full tappable (click)="done()" [disabled]="!isReadyToSave">
+    <ion-icon name="checkmark" color="primary_dark"></ion-icon>
   </button>
 
 </ion-footer>

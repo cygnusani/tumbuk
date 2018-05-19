@@ -27,30 +27,42 @@ export class StatisticsProvider {
     }
   }
 
-  getAll(): Promise<any> {
+  getAll(symptoms: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      let sql = '';
+      var params: any;
 
-      let sql = 'SELECT * FROM ingredient_in_meal WHERE note_id IN (SELECT id FROM note WHERE bad=?)';
-      this.db.executeSql(sql, [true]).then(res => {
+      // Filter by symptoms?
+      if (symptoms.length > 0) {
+        sql = 'SELECT * FROM ingredient_in_meal WHERE note_id IN (SELECT id FROM note WHERE bad=? AND id IN (SELECT note_id FROM symptom_in_meal WHERE symptom_id IN (SELECT id FROM symptom WHERE name IN (?) )))';
+        params = [true, symptoms.toString()];
+      }
+      // Get all
+      else {
+        sql = 'SELECT * FROM ingredient_in_meal WHERE note_id IN (SELECT id FROM note WHERE bad=?)';
+        params = [true];
+      }
 
-        let badIngredients = [];
+      this.db.executeSql(sql, params).then(res => {
+        var ingredients = [];
 
         // There are 'bad' meals in db
         if (res.rows.length > 0) {
           for (let i = 0; i < res.rows.length; i++) {
             const ingredient = res.rows.item(i);
+
             // Does bad ingredients list contain an object with a given ingredient name
-            var _i = badIngredients.findIndex(i => i.ingredient_id == ingredient.ingredient_id);
-            if (_i !== -1) {
-              badIngredients[_i].count++;
+            var j = ingredients.findIndex(ing => ing.ingredient_id == ingredient.ingredient_id);
+            if (j != -1) {
+              ingredients[j].count++;
             } else {
-              badIngredients.push(new Item({ ingredient_id: ingredient.ingredient_id, count: 1 }));
+              ingredients.push(new Item({ ingredient_id: ingredient.ingredient_id, count: 1 }));
             }
           }
-          let statistics = [];
+          var statistics = [];
 
-          for (let i = 0; i < badIngredients.length; i++) {
-            const badIngredient = badIngredients[i];
+          for (let i = 0; i < ingredients.length; i++) {
+            const badIngredient = ingredients[i];
 
             var insert = -1;
 
@@ -59,9 +71,9 @@ export class StatisticsProvider {
             this.db.executeSql(sql, [badIngredient.ingredient_id]).then(res => {
 
               // Save that ingredient name temporarily
-              const ingredientName = res.rows.item(0).name;
+              const name = res.rows.item(0).name;
 
-              // Loop through stats and find a stat with a same coun
+              // Loop through stats and find a stat with a same count
               if (statistics.length > 0) {
                 for (let j = 0; j < statistics.length; j++) {
                   const stat = statistics[j];
@@ -71,18 +83,18 @@ export class StatisticsProvider {
                   }
                 }
                 if (insert != -1) {
-                  statistics[insert].ingredients.push(ingredientName);
+                  statistics[insert].ingredients.push(name);
                 } else {
-                  statistics.push(new Stat({ ingredients: [ingredientName], count: badIngredient.count }));
+                  statistics.push(new Stat({ ingredients: [name], count: badIngredient.count }));
                 }
                 insert = -1;
               } else {
-                statistics.push(new Stat({ ingredients: [ingredientName], count: badIngredient.count }));
+                statistics.push(new Stat({ ingredients: [name], count: badIngredient.count }));
               }
             })
           }
-          // https://davidwalsh.name/array-sort
-          return resolve(statistics.sort((a, b) => b.count - a.count));
+          // https://www.w3schools.com/js/js_array_sort.asp
+          return resolve(this.sortByCount(statistics));
         } else {
           return resolve([]);
         }
@@ -91,6 +103,15 @@ export class StatisticsProvider {
       });
     }).catch(err => {
       console.log("Error: ", err);
+    });
+  }
+
+  sortByCount(array) {
+    return array.sort((a, b) => {
+      var x = a.count; var y = b.count;
+      if (x < y) return -1;
+      if (x > y) return 1;
+      return 0;
     });
   }
 }

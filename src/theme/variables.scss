@@ -15,9 +15,13 @@ $font-path: "../assets/fonts";
 $text-color:        #000;
 $background-color:  #FEFAEC; // #fff;
 
+// Form inputs
 $text-input-highlight-color-valid: #999;
 $text-input-highlight-color-invalid: #FF5D5D;
 $text-input-placeholder-color: #999;
+
+// Refresher
+$refresher-icon-color: #443c50;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -28,15 +32,15 @@ $text-input-placeholder-color: #999;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
-  secondary:  #04DEAD,
-  danger:     #FF5D5D, // #f53d3d,
-  light:      #f4f4f4,
+  primary:    #625772,
+  primary_dark: #443c50,
+  secondary:  #F9A1BC,
+  danger:     #FF5D5D,
+  light:      #FEFAEC,
   dark:       #222,
-  primary2:   #625772,
-  secondary2: #F9A1BC,
-  light2:     #FEFAEC,
-  light3:     #A9EEE6
+
+  danger_2: #e9595b,
+  danger_3: #c45359
 );
 
 

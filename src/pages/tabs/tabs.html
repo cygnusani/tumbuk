@@ -1,4 +1,5 @@
-<ion-tabs color="primary2">
-  <ion-tab [root]="tab1Root" [tabTitle]="tab1Title" tabIcon="stats"></ion-tab>
-  <ion-tab [root]="tab2Root" [tabTitle]="tab2Title" tabIcon="book"></ion-tab>
+<ion-tabs tabs-only tabsLayout="icon-bottom" color="primary_dark" no-border>
+  <ion-tab [root]="tab1Root" tappable tabTitle="{{ 'TAB1_TITLE' | translate }}" tabIcon="stats"></ion-tab>
+  <ion-tab [root]="tab2Root" tappable tabTitle="{{ 'TAB2_TITLE' | translate }}" tabIcon="book"></ion-tab>
+  <ion-tab [root]="tab3Root" tappable tabTitle="{{ 'TAB3_TITLE' | translate }}" tabIcon="settings"></ion-tab>
 </ion-tabs>

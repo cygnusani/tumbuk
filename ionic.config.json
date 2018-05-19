@@ -1,6 +1,6 @@
 {
-  "name": "notesApp",
-  "app_id": "",
+  "name": "tumbuk",
+  "app_id": "com.ml.tumbuk",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}

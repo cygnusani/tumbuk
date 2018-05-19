@@ -3,12 +3,13 @@ ion-row {
 }
 
 .ingredients {
-  display: inline-table !important;
-  width: 90% !important;
+  display: inline-table;
+  width: 90%;
 }
 
 .rank {
-  display: flex !important;
+  display: flex;
+  max-width: 4em;
 }
 
 ion-fab {
@@ -23,13 +24,39 @@ ion-fab {
 }
 
 .col {
-  min-height: 3.9em !important;
+  min-height: 3.9em;
 }
 
 ion-chip {
-  margin-right: .5em !important;
+  margin-right: .5em;
 }
 
 ion-badge {
-  font-weight: normal !important;
+  font-weight: normal;
+}
+
+ion-chip ion-label {
+  color: #FEFAEC;
+}
+
+.nothing {
+  margin-top: 50%;
+  text-align: center;
+}
+
+.something {
+  text-align: center;
+  padding-left: 0;
+}
+
+.something ion-label {
+  padding-bottom: 1em;
+}
+
+#symptoms-filter {
+  padding: 1em 2em 1em 2em;
+}
+
+.grid {
+  padding: 0;
 }

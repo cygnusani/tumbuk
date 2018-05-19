@@ -1,19 +1,24 @@
 ion-badge {
+  margin-top: .5em !important;
   margin-right: .5em;
   border-radius: 1em !important;
+}
+
+.note {
+  padding-left: 1em;
+}
+
+.label-md {
+  margin: .5em 0 .5em 0;
 }
 
 #add-btn {
   top: auto !important;
 }
 
-ion-badge {
-  margin-top: .5em !important;
-}
-
 .badge-md {
-  color: #000 !important;
-  background-color: #A9EEE6 !important;
+  color: #FEFAEC;
+  background-color: #625772;
 }
 
 ion-label {
@@ -21,6 +26,7 @@ ion-label {
 }
 
 .item-md h2 {
+  color: black;
   font-weight: bold !important;
 }
 
@@ -40,6 +46,44 @@ ion-list ion-item {
   color: #625772 !important;
 }
 
-ion-list {
-  padding-bottom: 4em !important;
+#notes-list {
+  padding-bottom: 4em;
+}
+
+// icon margin
+.item-md ion-icon[item-left], .item-md ion-icon[item-right], .item-md ion-icon[item-start], .item-md ion-icon[item-end] {
+  margin: 0;
+}
+
+// face icon
+.item > ion-icon, .item-inner > ion-icon {
+  font-size: 4rem;
+}
+
+ion-icon {
+  font-size: 4rem;
+}
+
+// delete and edit button font-size
+[icon-only] ion-icon {
+  font-size: 2.4em;
+}
+
+// remove delete button padding
+ion-item-options .button:last-child {
+  padding: 0;
+}
+
+ion-item-options .button {
+  width: 4em;
+}
+
+#nothing {
+  text-align: center;
+  margin-top: 50%;
+}
+
+.symptom {
+  margin: .2em 0 .2em 0;
+  padding-left: .2em;
 }

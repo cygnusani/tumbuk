@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Platform } from 'ionic-angular';
+import { IonicPage, LoadingController, Platform } from 'ionic-angular';
 import { StatisticsProvider } from '../../providers/statistics/statistics';
 import { AppProvider } from '../../providers/app/app';
+import { TranslateService } from '@ngx-translate/core';
+
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { SymptomsProvider } from '../../providers/symptoms/symptoms';
 
 /**
  * Generated class for the StatisticsPage page.
@@ -17,33 +21,61 @@ import { AppProvider } from '../../providers/app/app';
 })
 export class StatisticsPage {
   statistics = [];
+  symptoms = [];
+  symptom: any;
 
-  constructor(private appProv: AppProvider, private platform: Platform, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, private statisticsProv: StatisticsProvider) {
+  symptomsFilter = [];
+
+  constructor(private splashScreen: SplashScreen, private appProv: AppProvider, private platform: Platform, private loadingCtrl: LoadingController, private symptomsProv: SymptomsProvider, private statisticsProv: StatisticsProvider, private translate: TranslateService) {
   }
 
   ionViewWillEnter() {
-    if (!this.appProv.updateStatistics) { return; }
-    this.appProv.updateStatistics = false;
-    let loader = this.loadingCtrl.create({
-      content: "Please wait...",
-      duration: 3000
-    });
-    loader.present();
     this.platform.ready().then(() => {
-      this.statisticsProv.getAll().then(data => {
-        this.statistics = data;
-        loader.dismiss();
-      })
-    })
+      if (!this.appProv.updateStatistics) { return; }
+      this.appProv.updateStatistics = false;
+      this.load();
+    });
   }
-  
+
+  load() {
+    this.translate.get('LOADING_MESSAGE').subscribe(val => {
+      let loader = this.loadingCtrl.create({
+        spinner: "dots",
+        content: "Please wait...",
+        duration: 5000
+      });
+      loader.present();
+      this.symptomsProv.getAll().then(data => {
+        this.symptoms = data;
+      }).then(() => {
+        this.statisticsProv.getAll(this.symptomsFilter).then(data => {
+          this.statistics = data;
+          loader.dismiss();
+        });
+      });
+    });
+  }
+
+  ionViewDidEnter() {
+    this.splashScreen.hide();
+  }
+
   doRefresh(refresher) {
     setTimeout(() => {
       refresher.complete();
-    }, 1000);
-    this.statisticsProv.getAll().then(data => {
-      this.statistics = data;
-      refresher.complete();
-    })
+    }, 5000);
+    this.symptomsProv.getAll().then(data => {
+      this.symptoms = data;
+    }).then(() => {
+      this.statisticsProv.getAll(this.symptomsFilter).then(data => {
+        this.statistics = data;
+        refresher.complete();
+      });
+    });
+  }
+
+  applySymtomsFilter(s): void {
+    this.symptomsFilter = s;
+    this.load();
   }
 }

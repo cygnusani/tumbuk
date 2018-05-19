@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController, PopoverController, List, Platform, LoadingController } from 'ionic-angular';
+import { IonicPage, ModalController, AlertController, List, Platform, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { NotesProvider } from '../../providers/notes/notes';
 import { AppProvider } from '../../providers/app/app';
@@ -20,18 +20,26 @@ export class NotesPage {
 
   notes = [];
 
-  constructor(private appProv: AppProvider, public loadingCtrl: LoadingController, private platform: Platform, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private translate: TranslateService, public modalCtrl: ModalController, public popoverCtrl: PopoverController, private notesProv: NotesProvider) {
-    let loader = this.loadingCtrl.create({
-      content: "Please wait...",
-      duration: 3000
-    });
-    loader.present();
-    this.platform.ready().then(() => {
-      this.notesProv.getAll().then(data => {
-        this.notes = data;
-        loader.dismiss();
+  constructor(private appProv: AppProvider, private loadingCtrl: LoadingController, private platform: Platform, private alertCtrl: AlertController, private translate: TranslateService, private modalCtrl: ModalController, private notesProv: NotesProvider) {
+    this.load();
+  }
+
+  load() {
+    this.translate.get('LOADING_MESSAGE').subscribe(val => {
+      let loader = this.loadingCtrl.create({
+        spinner: "dots",
+        content: val,
+        duration: 5000
+      });
+      loader.present();
+      this.platform.ready().then(() => {
+        this.notesProv.getAll().then(data => {
+          this.notes = data;
+          this.appProv.updateNotes = false;
+          loader.dismiss();
+        })
       })
-    })
+    });
   }
 
   /**
@@ -55,14 +63,21 @@ export class NotesPage {
    */
   addNote() {
     this.list.closeSlidingItems();
-    let createNoteModal = this.modalCtrl.create('NoteCreatePage');
-    createNoteModal.onWillDismiss(res => {
-      if (res) {
-        this.notes.unshift(res);
-        this.appProv.updateStatistics = true;
-      }
-    })
-    createNoteModal.present();
+    this.translate.get("CREATE_NOTE_SUCCESS_TOAST").subscribe(val => {
+      let createNoteModal = this.modalCtrl.create('NoteCreatePage');
+      createNoteModal.onWillDismiss(res => {
+        if (this.appProv.updateStatistics) {
+          this.load();
+        }
+        if (res) {
+          this.notes.unshift(res);
+          this.appProv.updateStatistics = true;
+
+          this.appProv.toast(val, 3000, "top")
+        }
+      })
+      createNoteModal.present();
+    });
   }
 
   /**
@@ -70,14 +85,21 @@ export class NotesPage {
    */
   editNote(note) {
     this.list.closeSlidingItems();
-    let createNoteModal = this.modalCtrl.create('NoteCreatePage', { note: note });
-    createNoteModal.onWillDismiss(res => {
-      if (res) {
-        this.notes[this.notes.indexOf(note)] = res;
-        this.appProv.updateStatistics = true;
-      }
-    })
-    createNoteModal.present();
+    this.translate.get("EDIT_NOTE_SUCCESS_TOAST").subscribe(val => {
+      let createNoteModal = this.modalCtrl.create('NoteCreatePage', { note: note });
+      createNoteModal.onWillDismiss(res => {
+        if (res) {
+          this.appProv.updateStatistics = true;
+          this.notes[this.notes.indexOf(note)] = res;
+          this.appProv.toast(val, 3000, "top")
+        }
+        if (this.appProv.updateNotes) {
+          this.appProv.updateNotes = false;
+          this.load();
+        }
+      });
+      createNoteModal.present();
+    });
   }
 
   /**
@@ -85,11 +107,13 @@ export class NotesPage {
    */
   deleteNote(note) {
     this.list.closeSlidingItems();
-    this.translate.get(["DELETE_NOTE_ALERT_TITLE",
+    this.translate.get([
+      "DELETE_NOTE_ALERT_TITLE",
       "DELETE_NOTE_ALERT_MESSAGE",
       "DELETE_BUTTON",
-      "CANCEL_BUTTON"
-    ]).subscribe((values) => {
+      "CANCEL_BUTTON",
+      "DELETE_NOTE_SUCCESS_TOAST"
+    ]).subscribe(values => {
       let confirm = this.alertCtrl.create({
         title: values.DELETE_NOTE_ALERT_TITLE,
         message: values.DELETE_NOTE_ALERT_MESSAGE,
@@ -101,6 +125,9 @@ export class NotesPage {
                 if (res == -1) {
                   this.notes.splice(this.notes.indexOf(note), 1);
                   this.appProv.updateStatistics = true;
+                  this.appProv.toast(values.DELETE_NOTE_SUCCESS_TOAST, 3000, "top");
+                } else {
+                  this.presentErrorToast();
                 }
               })
             }
@@ -114,5 +141,11 @@ export class NotesPage {
       });
       confirm.present();
     })
+  }
+
+  private presentErrorToast() {
+    this.translate.get("ERROR_TOAST").subscribe(val => {
+      this.appProv.toast(val, 3000, "top");
+    });
   }
 }
