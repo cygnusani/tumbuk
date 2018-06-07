@@ -14,7 +14,35 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+ion-footer {
+  background: #3f51b5;
+}
 
-.toast-container {
-  background-color: #443c50;
+.item-md {
+  padding-right: 16px;
+}
+
+.item-md-no-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.card-md {
+  max-width: 450px;
+  left: 0 !important;
+  right: 0 !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chip-md {
+  margin: 2px 2px;
+}
+
+.happyCard, .sadCard {
+  text-align: center;
+}
+
+.happyCard, .sadCard ion-icon {
+  font-size: 3em;
 }

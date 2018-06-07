@@ -5,6 +5,7 @@
   "LOADING_MESSAGE": "Please wait...",
   "OK": "Ok",
 
+  "STATISTICS_TITLE": "Statistics",
   "SYMPTOMS_FILTER_LABEL": "Filter by symptom",
   "ALL_SYMPTOMS_RADIO": "All",
   "APPLY_FILTER_BUTTON": "Apply",
@@ -21,12 +22,12 @@
   "NEW_NOTE_TITLE": "New Note",
   "EDIT_NOTE_TITLE": "Edit Note",
 
-  "ERROR_INGREDIENT_EMPTY": "Insert a valid ingredient value",
-  "ERROR_ONE_INGREDIENT": "Insert atleast one ingredient",
-  "ERROR_INGREDIENT_EXISTS": "Inserted ingredient already exists",
+  "ERROR_INGREDIENT_EMPTY": "Insert a valid ingredient value!",
+  "ERROR_ONE_INGREDIENT": "Insert atleast one ingredient!",
+  "ERROR_INGREDIENT_EXISTS": "Inserted ingredient already exists!",
 
   "NOTE_MEAL_NAME_LABEL": "Name",
-  "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Add ingredients...",
+  "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Add new ingredient...",
   "NOTE_MEAL_DATE_LABEL": "Date",
   "NOTE_MEAL_SYMPTOMS_LABEL": "Symptoms",
   "NOTE_ADD_SYMPTOMS": "Add",
@@ -36,6 +37,8 @@
   "SYMPTOMS_TITLE": "Edit symptoms",
   "SYMPTOMS_DONE_BUTTON": "Done",
   "SYMPTOMS_ADD_SYMPTOM_PLACEHOLDER": "Add symptoms...",
+  "TOAST_ERROR_SYMPTOM_EMPTY": "Insert a valid symptom value!",
+  "TOAST_ERROR_SYMPTOM_EXISTS": "Inserted symptom already exists!",
   "TOAST_DELETE_SYMPTOM_SUCCESS": "Symptom deleted successfully!",
   "TOAST_ERROR_NOTE_DEPENDENCY": "Deletion failed! Remove all selected symptom dependencies and try again.",
 
@@ -61,5 +64,7 @@
   "ABOUT_TITLE": "About",
   "APP_NAME": "Tumbuk",
   "DEVELOPER": "An app by Martin Luik",
+  "ABOUT_DEVELOPER": "TODO",
+  "FEEDBACK_LINK": "Feedback",
   "APP_VERSION": "App version: "
 }

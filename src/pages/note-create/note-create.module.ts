@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NoteCreatePage } from './note-create';
-
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({

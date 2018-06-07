@@ -6,47 +6,52 @@
 -->
 <ion-content>
 
-  <div id="nothing" *ngIf="notes.length == 0">
-    <ion-icon name="happy" color="primary"></ion-icon>
-    <h2>{{ 'NO_NOTES_MESSAGE' | translate }}</h2>
-    <p>{{ 'NO_NOTES_MESSAGE_2' | translate }}</p>
-  </div>
-
   <ion-fab id="add-btn" right bottom>
-    <button ion-fab large color="primary_dark" (click)="addNote()">
+    <button ion-fab large color="pink" (click)="addNote()">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>
 
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-round-down" pullingText="{{ 'REFRESHER_PULLING_TEXT' | translate }}" refreshingSpinner="dots"
-      refreshingText="{{ 'REFRESHING_TEXT' | translate }}">
-    </ion-refresher-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)" no-border>
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="{{ 'REFRESHER_PULLING_TEXT' | translate }}" refreshingText="{{ 'REFRESHING_TEXT' | translate }}"></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list id="notes-list">
-    <ion-item-sliding *ngFor="let note of notes">
-      <ion-item class="note">
-        <!--
-        <ion-icon [name]="note.bad=='true' ? 'sad' : 'happy'" item-start [color]="note.bad=='true' ? 'danger' : 'primary'"></ion-icon>
-        -->
-        <ion-icon [name]="note.symptoms.length > 0 ? 'sad' : 'happy'" item-start [color]="note.symptoms.length > 0 ? 'danger' : 'primary'"></ion-icon>
-        <h2>{{note.meal}}</h2>
-        <p>{{note.date}}</p>
-        <ion-badge *ngFor="let i of note.ingredients">{{i.name}}</ion-badge>
-        <p class="symptom" *ngFor="let s of note.symptoms">• {{s.name}}</p>
-        <!--<ion-badge *ngFor="let s of note.symptoms">{{s.name}}</ion-badge>-->
-      </ion-item>
+  <div class="cards">
 
-      <ion-item-options side="right">
-        <button ion-button icon-only clear color="danger" tappable (click)="deleteNote(note)">
-          <ion-icon name="trash"></ion-icon>
-        </button>
-        <button ion-button icon-only clear color="primary_dark" tappable (click)="editNote(note)">
-          <ion-icon name="create"></ion-icon>
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+    <ion-card *ngIf="notes.length == 0">
+      <ion-card-content class="happyCard">
+        <ion-icon name="happy" color="primary"></ion-icon>
+        <h2 ion-text color="dark">{{ 'NO_NOTES_MESSAGE' | translate }}</h2>
+        <p ion-text color="dark">{{ 'NO_NOTES_MESSAGE_2' | translate }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngFor="let note of notes">
+      <ion-card-content>
+        <ion-note item-start class="noteBad">
+          <ion-icon [name]="note.symptoms.length > 0 ? 'sad' : 'happy'" [color]="note.symptoms.length > 0 ? 'danger' : 'primary'"></ion-icon>
+        </ion-note>
+        <h2 ion-text color="dark" class="noteMeal">{{note.meal}}</h2>
+        <ion-note item-end class="noteDate">
+          <p ion-text color="dark">{{note.date}}</p>
+        </ion-note>
+        <div class="noteIngredients">
+          <ion-chip *ngFor="let i of note.ingredients">
+            <ion-label ion-text color="dark">{{i.name}}</ion-label>
+          </ion-chip>
+        </div>
+        <div *ngIf="note.symptoms.length > 0" class="noteSymptoms">
+          <p ion-text color="dark">{{noteSymptoms(note)}}</p>
+        </div>
+      </ion-card-content>
+      <button class="editNoteButton" ion-button clear icon-only tappable (click)="editNote(note)">
+        <ion-icon name="create" color="secondary"></ion-icon>
+      </button>
+      <button class="deleteNoteButton" ion-button clear icon-only tappable (click)="deleteNote(note)">
+        <ion-icon name="trash" color="danger"></ion-icon>
+      </button>
+    </ion-card>
+
+  </div>
 
 </ion-content>

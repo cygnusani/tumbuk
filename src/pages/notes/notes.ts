@@ -16,9 +16,11 @@ import { AppProvider } from '../../providers/app/app';
   templateUrl: 'notes.html',
 })
 export class NotesPage {
-  @ViewChild(List) list: List;
+  //@ViewChild(List) list: List;
 
   notes = [];
+
+  recordsLimit = 15;
 
   constructor(private appProv: AppProvider, private loadingCtrl: LoadingController, private platform: Platform, private alertCtrl: AlertController, private translate: TranslateService, private modalCtrl: ModalController, private notesProv: NotesProvider) {
     this.load();
@@ -27,13 +29,13 @@ export class NotesPage {
   load() {
     this.translate.get('LOADING_MESSAGE').subscribe(val => {
       let loader = this.loadingCtrl.create({
-        spinner: "dots",
+        //spinner: "dots",
         content: val,
         duration: 5000
       });
       loader.present();
       this.platform.ready().then(() => {
-        this.notesProv.getAll().then(data => {
+        this.notesProv.getAll(this.recordsLimit).then(data => {
           this.notes = data;
           this.appProv.updateNotes = false;
           loader.dismiss();
@@ -50,11 +52,25 @@ export class NotesPage {
     setTimeout(() => {
       refresher.complete();
     }, 3000);
-    this.list.closeSlidingItems();
-    this.notesProv.getAll().then(data => {
+    //this.list.closeSlidingItems();
+    this.notesProv.getAll(this.recordsLimit).then(data => {
       this.notes = data;
       refresher.complete();
     })
+  }
+
+  noteSymptoms(note: any): string {
+    var symptomsString = '';
+    if (note.symptoms.length > 0) {
+      for (let i = 0; i < note.symptoms.length; i++) {
+        const symptom = note.symptoms[i];
+        symptomsString += symptom.name;
+        if (i < note.symptoms.length - 1) {
+          symptomsString += ', ';
+        }
+      }
+    }
+    return symptomsString;
   }
 
   /**
@@ -62,16 +78,16 @@ export class NotesPage {
    * modal and then adds the new note to our data source if the user created one.
    */
   addNote() {
-    this.list.closeSlidingItems();
+    //this.list.closeSlidingItems();
     this.translate.get("CREATE_NOTE_SUCCESS_TOAST").subscribe(val => {
       let createNoteModal = this.modalCtrl.create('NoteCreatePage');
       createNoteModal.onWillDismiss(res => {
-        if (this.appProv.updateStatistics) {
-          this.load();
-        }
+        //if (this.appProv.updateStatistics) {
+        //  this.load();
+        //}
         if (res) {
           this.notes.unshift(res);
-          this.appProv.updateStatistics = true;
+          //this.appProv.updateStatistics = true;
 
           this.appProv.toast(val, 3000, "top")
         }
@@ -84,12 +100,12 @@ export class NotesPage {
    * Edit a note from the list of notes.
    */
   editNote(note) {
-    this.list.closeSlidingItems();
+    //this.list.closeSlidingItems();
     this.translate.get("EDIT_NOTE_SUCCESS_TOAST").subscribe(val => {
       let createNoteModal = this.modalCtrl.create('NoteCreatePage', { note: note });
       createNoteModal.onWillDismiss(res => {
         if (res) {
-          this.appProv.updateStatistics = true;
+          this.appProv.refreshStatistics = true;
           this.notes[this.notes.indexOf(note)] = res;
           this.appProv.toast(val, 3000, "top")
         }
@@ -106,7 +122,7 @@ export class NotesPage {
    * Delete a note from the list of notes.
    */
   deleteNote(note) {
-    this.list.closeSlidingItems();
+    //this.list.closeSlidingItems();
     this.translate.get([
       "DELETE_NOTE_ALERT_TITLE",
       "DELETE_NOTE_ALERT_MESSAGE",
@@ -124,7 +140,9 @@ export class NotesPage {
               this.notesProv.delete(note).then(res => {
                 if (res == -1) {
                   this.notes.splice(this.notes.indexOf(note), 1);
-                  this.appProv.updateStatistics = true;
+                  if (note.symptoms.length > 0) {
+                    this.appProv.refreshStatistics = true;
+                  }
                   this.appProv.toast(values.DELETE_NOTE_SUCCESS_TOAST, 3000, "top");
                 } else {
                   this.presentErrorToast();

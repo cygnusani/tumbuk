@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
+import { AppProvider } from '../../providers/app/app';
 
-/**
- * Generated class for the AboutPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -14,8 +9,10 @@ import { IonicPage } from 'ionic-angular';
   templateUrl: 'about.html',
 })
 export class AboutPage {
+  appVersion = 0;
 
-  constructor() {
+  constructor(private appProv: AppProvider) {
+    this.appVersion = appProv.version;
   }
 
 }

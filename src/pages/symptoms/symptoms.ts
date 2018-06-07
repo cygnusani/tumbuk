@@ -4,13 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { AppProvider } from '../../providers/app/app';
 import { SymptomsProvider } from '../../providers/symptoms/symptoms';
 import { NotesProvider } from '../../providers/notes/notes';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
-/**
- * Generated class for the SymptomsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -18,33 +13,42 @@ import { NotesProvider } from '../../providers/notes/notes';
   templateUrl: 'symptoms.html',
 })
 export class SymptomsPage implements OnInit {
+  form: FormGroup;
+  isReadyToSave: boolean;
 
   symptoms = [];
   symptom = '';
 
-  noteId = -1;
   saved = false;
 
   constructor(private symptomsProv: SymptomsProvider,
     private notesProv: NotesProvider,
     private appProv: AppProvider,
+    private formBuilder: FormBuilder,
     private translate: TranslateService,
     private navParams: NavParams,
     private viewCtrl: ViewController) {
   }
 
   ngOnInit(): void {
-    this.noteId = this.navParams.get('noteId');
     var symptoms = this.navParams.get('symptoms');
     if (symptoms) {
       this.symptoms = symptoms;
     }
     this.saved = true;
+
+    this.form = this.formBuilder.group({
+      symptom: []
+    });
+
+    //this.isReadyToSave = true;
+
+    // Watch the form for changes
+    this.form.valueChanges.subscribe((v) => {
+      this.isReadyToSave = this.form.valid;
+    });
   }
 
-  /**
-   * Add new symptom
-   */
   add() {
     this.translate.get([
       "TOAST_ERROR_SYMPTOM_EMPTY",
@@ -56,12 +60,12 @@ export class SymptomsPage implements OnInit {
       // Checking if the inserted symptom is valid
       // Length is zero
       if (name.length == 0) {
-        this.appProv.toast(values.ERROR_SYMPTOM_EMPTY, 3000, "top");
+        this.appProv.toast(values.TOAST_ERROR_SYMPTOM_EMPTY, 3000, "top");
         return;
       }
       // Inserted sympton already exists
       if (this.symptoms.findIndex(s => s.name == name) != -1) {
-        this.appProv.toast(values.ERROR_SYMPTOM_EXISTS, 3000, "top");
+        this.appProv.toast(values.TOAST_ERROR_SYMPTOM_EXISTS, 3000, "top");
         return;
       }
       // Clear insert field
@@ -74,14 +78,12 @@ export class SymptomsPage implements OnInit {
         this.symptoms.push({ id: generatedId, name: name });
         // End saving
         this.saved = true;
+        // Update statistcis page to load data from db again
+        this.appProv.refreshStatistics = true;
       });
     });
   }
 
-  /**
-   * Deletes the symptom if not used
-   * @param symptom
-   */
   delete(symptom: any) {
     this.translate.get([
       "TOAST_DELETE_SYMPTOM_SUCCESS",
@@ -96,7 +98,7 @@ export class SymptomsPage implements OnInit {
         // Delete successfuly
         if (res == 1) {
           // Update statistics
-          this.appProv.updateStatistics = true;
+          this.appProv.refreshStatistics = true;
           // Remove symptom from visible list
           this.symptoms.splice(this.symptoms.findIndex(s => s.name == symptom.name), 1);
           // Toast
@@ -118,9 +120,6 @@ export class SymptomsPage implements OnInit {
     });
   }
 
-  /**
-   * Dismisses the modal and returns new/updated symptoms list
-   */
   done() {
     this.viewCtrl.dismiss(this.symptoms);
   }

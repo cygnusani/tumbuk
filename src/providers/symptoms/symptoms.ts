@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+//import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SQLiteObject, SQLite } from '@ionic-native/sqlite';
-import { Item } from '../../models/item';
-import { Stat } from '../../models/stat';
+import { SQLiteObject, SQLite } from '@ionic-native/sqlite'; //SQLite
+//import { Item } from '../../models/item';
+//import { Stat } from '../../models/stat';
 
 /*
   Generated class for the SymptomsProvider provider.
@@ -16,27 +16,26 @@ export class SymptomsProvider {
   private db: SQLiteObject;
   public isOpen: boolean;
 
-  constructor(private sqlite: SQLite) {
+  constructor(private sqlite: SQLite) { //
     if (!this.isOpen) {
       this.sqlite = new SQLite();
       this.sqlite.create({ name: "data.db", location: "default" }).then((db: SQLiteObject) => {
         this.db = db;
         this.isOpen = true;
-      }).catch((error) => {
-        console.log(error);
+      }).catch(err => {
+        //console.log("Error: ", err);
       })
     }
   }
 
   insert(name: any): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       let sql = 'INSERT INTO symptom VALUES(NULL,?)';
       this.db.executeSql(sql, [name]).then(res => {
-        console.log(res);
+        //console.log(res);
         return resolve(res.insertId);
       }).catch(err => {
-        console.log("Error: ", err);
-        return reject(err);
+        //console.log("Error: ", err);
       });
     });
   }
@@ -50,25 +49,25 @@ export class SymptomsProvider {
         } else {
           let sql = 'DELETE FROM symptom WHERE id=?';
           this.db.executeSql(sql, [symptomId]).then(res => {
-            console.log(res);
+            //console.log(res);
             return resolve(1);
           }).catch(err => {
-            console.log("Error: ", err);
+            //console.log("Error: ", err);
             return resolve(-2);
           });
         }
       }).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
         return resolve(-2);
       });
     });
   }
 
   getAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       let sql = 'SELECT * FROM symptom';
       this.db.executeSql(sql, []).then(res => {
-        console.log(res);
+        //console.log(res);
         var symptoms = [];
         for (var i = 0; i < res.rows.length; i++) {
           symptoms.push({
@@ -78,10 +77,10 @@ export class SymptomsProvider {
         }
         return resolve(symptoms);
       }).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
       });
     }).catch(err => {
-      console.log("Error: ", err);
+      //console.log("Error: ", err);
     });
   }
 }

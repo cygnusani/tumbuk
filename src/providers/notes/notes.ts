@@ -37,7 +37,7 @@ export class NotesProvider {
         });
         this.isOpen = true;
       }).catch((error) => {
-        console.log(error);
+        //console.log(error);
       })
     }
   }
@@ -50,7 +50,7 @@ export class NotesProvider {
       // Save new note
       this.db.executeSql(sql, [note.meal, note.bad, note.date]).then(res => {
         noteId = res.insertId;
-        console.log('Generated id=' + noteId);
+        //console.log('Generated id=' + noteId);
 
         // Update ingredients
         for (let i = 0; i < note.ingredients.length; i++) {
@@ -59,7 +59,7 @@ export class NotesProvider {
           // Insert ingredients if dont exist
           // Check if this ingredient is already in db
           this.db.executeSql(sql, [ingredient.name]).then(res => {
-            console.log(res)
+            //console.log(res)
             // There is a record with a given ingredient name and then connect note and ingredient
             if (res.rows.length > 0) {
               let ingredientId = res.rows.item(0).id;
@@ -67,7 +67,7 @@ export class NotesProvider {
               this.db.executeSql(sql, [noteId, ingredientId]).then(res => {
                 //console.log("Result: ", res);
               }).catch(err => {
-                console.log("Error: ", err);
+                //console.log("Error: ", err);
               });
             }
             // No record found, let's create one
@@ -81,14 +81,14 @@ export class NotesProvider {
                 sql = 'INSERT INTO ingredient_in_meal VALUES(NULL,?,?)';
                 this.db.executeSql(sql, [noteId, ingredientId]).then(res => {
                 }).catch(err => {
-                  console.log("Error: ", err);
+                  //console.log("Error: ", err);
                 });
               }).catch(err => {
-                console.log("Error: ", err);
+                //console.log("Error: ", err);
               });
             }
           }).catch(err => {
-            console.log("Error: ", err);
+            //console.log("Error: ", err);
           });
         }
 
@@ -99,7 +99,7 @@ export class NotesProvider {
           // Insert symptom if dont exist
           // Check if this symptom is already in db
           this.db.executeSql(sql, [symptom.name]).then(res => {
-            console.log(res)
+            //console.log(res)
             // There is a record with a given symptom name and then connect note and symptom
             if (res.rows.length > 0) {
               let symptomId = res.rows.item(0).id;
@@ -107,7 +107,7 @@ export class NotesProvider {
               this.db.executeSql(sql, [noteId, symptomId]).then(res => {
                 //console.log("Result: ", res);
               }).catch(err => {
-                console.log("Error: ", err);
+                //console.log("Error: ", err);
               });
             }
             // No record found, let's create one
@@ -121,25 +121,25 @@ export class NotesProvider {
                 sql = 'INSERT INTO symptom_in_meal VALUES(NULL,?,?)';
                 this.db.executeSql(sql, [noteId, symptomId]).then(res => {
                 }).catch(err => {
-                  console.log("Error: ", err);
+                  //console.log("Error: ", err);
                 });
               }).catch(err => {
-                console.log("Error: ", err);
+                //console.log("Error: ", err);
               });
             }
           }).catch(err => {
-            console.log("Error: ", err);
+            //console.log("Error: ", err);
           });
         }
 
         return resolve(noteId);
 
       }).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
       });
 
     }).catch(err => {
-      console.log("Error: ", err);
+      //console.log("Error: ", err);
     });
   }
 
@@ -170,7 +170,7 @@ export class NotesProvider {
                   let sql = 'INSERT INTO ingredient_in_meal VALUES(NULL,?,?)';
                   this.db.executeSql(sql, [note.id, ingredientId]).then(res => {
                   }).catch(err => {
-                    console.log("Error: ", err);
+                    //console.log("Error: ", err);
                   });
                 }
 
@@ -186,24 +186,24 @@ export class NotesProvider {
                     sql = 'INSERT INTO ingredient_in_meal VALUES(NULL,?,?)';
                     this.db.executeSql(sql, [note.id, ingredientId]).then(res => {
                     }).catch(err => {
-                      console.log("Error: ", err);
+                      //console.log("Error: ", err);
                     });
                   }).catch(err => {
-                    console.log("Error: ", err);
+                    //console.log("Error: ", err);
                   });
                 }
 
               }).catch(err => {
-                console.log("Error: ", err);
+                //console.log("Error: ", err);
               });
             }
 
           }).catch(err => {
-            console.log("Error: ", err);
+            //console.log("Error: ", err);
           });
 
         }).catch(err => {
-          console.log("Error: ", err);
+          //console.log("Error: ", err);
         });
 
         // Delete all connections
@@ -216,24 +216,24 @@ export class NotesProvider {
 
             let sql = 'INSERT INTO symptom_in_meal VALUES(NULL,?,?)';
             this.db.executeSql(sql, [note.id, symptom.id]).then(res => {
-              console.log(note.id + " " + symptom.id);
+              //console.log(note.id + " " + symptom.id);
             }).catch(err => {
-              console.log("Error: ", err);
+              //console.log("Error: ", err);
             });
           }
 
         }).catch(err => {
-          console.log("Error: ", err);
+          //console.log("Error: ", err);
         });
       });
       return resolve(note.id);
     })
   }
 
-  getAll(): Promise<any> {
+  getAll(recordsLimit: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      let sql = 'SELECT * FROM note ORDER BY id DESC LIMIT 15';
-      this.db.executeSql(sql, []).then(res => {
+      let sql = 'SELECT * FROM note ORDER BY id DESC LIMIT ?';
+      this.db.executeSql(sql, [recordsLimit]).then(res => {
         var notes = [];
 
         // Note
@@ -251,49 +251,61 @@ export class NotesProvider {
         // Ingredients in note
         for (let i = 0; i < notes.length; i++) {
           const note = notes[i];
-          let sql = 'SELECT * FROM ingredient_in_meal WHERE note_id=?';
+          let sql = 'SELECT * FROM ingredient WHERE id IN (SELECT ingredient_id FROM ingredient_in_meal WHERE note_id=?)';
+          //let sql = 'SELECT * FROM ingredient_in_meal WHERE note_id=?';
           this.db.executeSql(sql, [note.id]).then(res => {
+            console.log(res);
             for (var i = 0; i < res.rows.length; i++) {
-              let ingredientId = res.rows.item(i).ingredient_id;
-              let sql = 'SELECT * FROM ingredient WHERE id=?';
-              this.db.executeSql(sql, [ingredientId]).then(res => {
-                for (var i = 0; i < res.rows.length; i++) {
-                  note.ingredients.push({
-                    id: res.rows.item(i).id,
-                    name: res.rows.item(i).name
-                  })
-                }
-              })
+              note.ingredients.push({
+                id: res.rows.item(i).id,
+                name: res.rows.item(i).name
+              });
+              //let ingredientId = res.rows.item(i).ingredient_id;
+              //let sql = 'SELECT * FROM ingredient WHERE id=?';
+              //this.db.executeSql(sql, [ingredientId]).then(res => {
+              //  for (var i = 0; i < res.rows.length; i++) {
+              //    note.ingredients.push({
+              //      id: res.rows.item(i).id,
+              //      name: res.rows.item(i).name
+              //    })
+              //  }
+              //})
             }
           })
-        }
+          //}
 
-        // Symptoms in note
-        for (let i = 0; i < notes.length; i++) {
-          const note = notes[i];
-          let sql = 'SELECT * FROM symptom_in_meal WHERE note_id=?';
-          this.db.executeSql(sql, [note.id]).then(res => {
+          // Symptoms in note
+          //for (let i = 0; i < notes.length; i++) {
+          //const note = notes[i];
+          let sql2 = 'SELECT * FROM symptom WHERE id IN (SELECT symptom_id FROM symptom_in_meal WHERE note_id=?)';
+          //let sql2 = 'SELECT * FROM symptom_in_meal WHERE note_id=?';
+          this.db.executeSql(sql2, [note.id]).then(res => {
+            //console.log(res);
             for (var i = 0; i < res.rows.length; i++) {
-              let symptomId = res.rows.item(i).symptom_id;
-              let sql = 'SELECT * FROM symptom WHERE id=?';
-              this.db.executeSql(sql, [symptomId]).then(res => {
-                for (var i = 0; i < res.rows.length; i++) {
-                  note.symptoms.push({
-                    id: res.rows.item(i).id,
-                    name: res.rows.item(i).name
-                  })
-                }
-              })
+              note.symptoms.push({
+                id: res.rows.item(i).id,
+                name: res.rows.item(i).name
+              });
+              //let symptomId = res.rows.item(i).symptom_id;
+              //let sql = 'SELECT * FROM symptom WHERE id=?';
+              //this.db.executeSql(sql, [symptomId]).then(res => {
+              //  for (var i = 0; i < res.rows.length; i++) {
+              //    note.symptoms.push({
+              //      id: res.rows.item(i).id,
+              //      name: res.rows.item(i).name
+              //    })
+              //  }
+              //})
             }
           })
         }
 
         return resolve(notes);
       }).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
       });
     }).catch(err => {
-      console.log("Error: ", err);
+      //console.log("Error: ", err);
     });
   }
 
@@ -303,23 +315,23 @@ export class NotesProvider {
       // Delete note
       this.db.executeSql('DELETE FROM note WHERE id=?', [note.id]).then(res => {
       }).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
       });
 
       // Delete connection between note and ingredient
       this.db.executeSql('DELETE FROM ingredient_in_meal WHERE note_id=?', [note.id]).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
       });
 
       // Delete connection between note and symptom
       this.db.executeSql('DELETE FROM symptom_in_meal WHERE note_id=?', [note.id]).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
       });
 
       // Delete all ingredients from db that are only connected with this note
       var sql = 'DELETE FROM ingredient WHERE id NOT IN (SELECT ingredient_id FROM ingredient_in_meal)'
       this.db.executeSql(sql, []).catch(err => {
-        console.log("Error: ", err);
+        //console.log("Error: ", err);
       });
 
       // Delete all ingredients from db that are only connected with this note
@@ -332,17 +344,13 @@ export class NotesProvider {
     })
   }
 
-  /**
-   * Delets given symptom(s) connection(s) with note(s)
-   * @param symptomsToDeleteIds
-   */
   deleteSymptomsConnections(symptomsToDeleteIds: any): Promise<any> {
     return new Promise(resolve => {
       for (let i = 0; i < symptomsToDeleteIds.length; i++) {
         const id = symptomsToDeleteIds[i];
         var sql = 'DELETE FROM symptom_in_meal WHERE symptom_id=?';
         this.db.executeSql(sql, [id]).catch(err => {
-          console.log("Error: ", err);
+          //console.log("Error: ", err);
         });
       }
       return resolve(1);

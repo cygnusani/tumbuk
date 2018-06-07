@@ -12,16 +12,12 @@ $font-path: "../assets/fonts";
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        #000;
-$background-color:  #FEFAEC; // #fff;
+$text-color:        #292929;
+$background-color:  #fafafa;
 
-// Form inputs
-$text-input-highlight-color-valid: #999;
-$text-input-highlight-color-invalid: #FF5D5D;
-$text-input-placeholder-color: #999;
-
-// Refresher
-$refresher-icon-color: #443c50;
+$refresher-icon-color:   #292929;
+$refresher-text-color:   #292929;
+$refresher-border-color: #fafafa;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -32,15 +28,15 @@ $refresher-icon-color: #443c50;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #625772,
-  primary_dark: #443c50,
-  secondary:  #F9A1BC,
-  danger:     #FF5D5D,
-  light:      #FEFAEC,
-  dark:       #222,
+  primary:    #3f51b5,
+  secondary:  #607d8b,
+  danger:     #f44336,
+  light:      #fafafa,
+  dark:       #292929,
+  pink:       #e91e63,
 
-  danger_2: #e9595b,
-  danger_3: #c45359
+  danger_2:   #e9595b,
+  danger_3:   #f3858b,
 );
 
 

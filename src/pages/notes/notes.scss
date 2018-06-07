@@ -1,6 +1,63 @@
-ion-badge {
-  margin-top: .5em !important;
-  margin-right: .5em;
+ion-item-sliding .item {
+  padding: 0;
+}
+
+.list-md .item-block .item-inner {
+  border-bottom: 0;
+}
+
+.item-md.item-block .item-inner {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.label-md {
+  margin: 0;
+}
+
+.list-md ion-item-options {
+  border-bottom: 0;
+}
+
+.item-md {
+  transition: none;
+}
+
+.noteBad ion-icon {
+  font-size: 3em;
+}
+
+.noteMeal {
+  display: inline-block;
+}
+
+.noteDate {
+  float: right;
+  margin: 0 !important;
+}
+
+.noteSymptoms {
+  margin: 1em 2px 2px 2px;
+}
+
+.cards {
+  padding-bottom: 5em;
+}
+
+.card-md h2 {
+  margin-left: 0.6em;
+}
+
+.editNoteButton {
+  float: right;
+}
+
+.deleteNoteButton {
+  float: right;
+}
+
+/*ion-badge {
+  margin: .25em;
   border-radius: 1em !important;
 }
 
@@ -87,3 +144,4 @@ ion-item-options .button {
   margin: .2em 0 .2em 0;
   padding-left: .2em;
 }
+*/
