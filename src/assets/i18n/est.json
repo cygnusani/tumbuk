@@ -22,22 +22,25 @@
   "NEW_NOTE_TITLE": "Uus märge",
   "EDIT_NOTE_TITLE": "Muuda märget",
 
-  "ERROR_INGREDIENT_EMPTY": "Sisestage valiidne koostisosa!",
-  "ERROR_ONE_INGREDIENT": "Sisestage vähemalt 1 koostisosa!",
-  "ERROR_INGREDIENT_EXISTS": "Sisestatud koostisosa on juba olemas!",
+  "NOTE_CREATE_ERROR_REQUIRED": "See väli on nõutud.",
+  "NOTE_CREATE_ERROR_MEAL_LENGTH": "Toidu nimi peab olema 3-150 sümbolit pikk.",
+
+  "NOTE_CREATE_ERROR_INGREDIENT_LENGTH": "Koostisosa peab olema 3-150 sümbolit pikk",
+  "NOTE_CREATE_ERROR_INGREDIENTS_NR": "Sisestage vähemalt 1 koostisosa.",
+  "NOTE_CREATE_ERROR_INGREDIENT_EXISTS": "Sisestatud koostisosa on juba olemas.",
 
   "NOTE_MEAL_NAME_LABEL": "Nimi",
   "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Lisa uus koostisosa...",
   "NOTE_MEAL_DATE_LABEL": "Kuupäev",
   "NOTE_MEAL_SYMPTOMS_LABEL": "Sümptomid",
-  "NOTE_ADD_SYMPTOMS": "Lisa",
+  "NOTE_ADD_SYMPTOMS": "Valmis",
   "NOTE_CANCEL_SYMPTOMS": "Tühista",
   "CLOSE_BUTTON": "Sulge",
 
   "SYMPTOMS_TITLE": "Muuda sümptomeid",
   "SYMPTOMS_DONE_BUTTON": "Valmis",
   "SYMPTOMS_ADD_SYMPTOM_PLACEHOLDER": "Lisa sümptomeid...",
-  "TOAST_ERROR_SYMPTOM_EMPTY": "Sisestage valiidne sümptom!",
+  "TOAST_ERROR_SYMPTOM_LENGTH": "Sümptom peab olema {0}-{1} sümbolit pikk!",
   "TOAST_ERROR_SYMPTOM_EXISTS": "Sisestatud sümptom on juba olemas!",
   "TOAST_DELETE_SYMPTOM_SUCCESS": "Sümptom edukalt kustutatud!",
   "TOAST_ERROR_NOTE_DEPENDENCY": "Kustutamine ebaõnnestus! Eemaldage kõik vastava sümptomi sõltuvused ja proovige uuesti.",
@@ -64,7 +67,7 @@
   "ABOUT_TITLE": "Rakendusest",
   "APP_NAME": "Tumbuk",
   "DEVELOPER": "Autor: Martin Luik",
-  "ABOUT_DEVELOPER": "TODO",
-  "FEEDBACK_LINK": "Tagasiside",
-  "APP_VERSION": "Rakenduse versioon: "
+  "ABOUT_DEVELOPER": "Keegi, kes sisustab vaba aega rakenduste loomisega...",
+
+  "FEEDBACK_LINK": "Tagasiside"
 }

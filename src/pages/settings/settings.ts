@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
+import { AppProvider } from '../../providers/app/app';
 
 
 @IonicPage()
@@ -12,7 +13,7 @@ import { Storage } from '@ionic/storage';
 export class SettingsPage {
   lang = 'eng';
 
-  constructor(private storage: Storage, private translate: TranslateService, private navCtrl: NavController) {
+  constructor(private appProv: AppProvider, private storage: Storage, private translate: TranslateService, private navCtrl: NavController) {
     this.storage.get('lang').then(val => {
       if (val) {
         this.lang = val

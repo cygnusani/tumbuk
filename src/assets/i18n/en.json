@@ -22,22 +22,25 @@
   "NEW_NOTE_TITLE": "New Note",
   "EDIT_NOTE_TITLE": "Edit Note",
 
-  "ERROR_INGREDIENT_EMPTY": "Insert a valid ingredient value!",
-  "ERROR_ONE_INGREDIENT": "Insert atleast one ingredient!",
-  "ERROR_INGREDIENT_EXISTS": "Inserted ingredient already exists!",
+  "NOTE_CREATE_ERROR_REQUIRED": "This field is required.",
+  "NOTE_CREATE_ERROR_MEAL_LENGTH": "The meal name must be 3-150 characters long.",
+
+  "NOTE_CREATE_ERROR_INGREDIENT_LENGTH": "The ingredient name must be 3-150 characters long.",
+  "NOTE_CREATE_ERROR_INGREDIENTS_NR": "Insert atleast 1 ingredient.",
+  "NOTE_CREATE_ERROR_INGREDIENT_EXISTS": "Inserted ingredient already exists.",
 
   "NOTE_MEAL_NAME_LABEL": "Name",
   "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Add new ingredient...",
   "NOTE_MEAL_DATE_LABEL": "Date",
   "NOTE_MEAL_SYMPTOMS_LABEL": "Symptoms",
-  "NOTE_ADD_SYMPTOMS": "Add",
+  "NOTE_ADD_SYMPTOMS": "Done",
   "NOTE_CANCEL_SYMPTOMS": "Cancel",
   "CLOSE_BUTTON": "Close",
 
   "SYMPTOMS_TITLE": "Edit symptoms",
   "SYMPTOMS_DONE_BUTTON": "Done",
   "SYMPTOMS_ADD_SYMPTOM_PLACEHOLDER": "Add symptoms...",
-  "TOAST_ERROR_SYMPTOM_EMPTY": "Insert a valid symptom value!",
+  "TOAST_ERROR_SYMPTOM_LENGTH": "The symptom must be {0}-{1} characters long!",
   "TOAST_ERROR_SYMPTOM_EXISTS": "Inserted symptom already exists!",
   "TOAST_DELETE_SYMPTOM_SUCCESS": "Symptom deleted successfully!",
   "TOAST_ERROR_NOTE_DEPENDENCY": "Deletion failed! Remove all selected symptom dependencies and try again.",
@@ -64,7 +67,7 @@
   "ABOUT_TITLE": "About",
   "APP_NAME": "Tumbuk",
   "DEVELOPER": "An app by Martin Luik",
-  "ABOUT_DEVELOPER": "TODO",
-  "FEEDBACK_LINK": "Feedback",
-  "APP_VERSION": "App version: "
+  "ABOUT_DEVELOPER": "Someone who likes creating apps in his spare time...",
+
+  "FEEDBACK_LINK": "Feedback"
 }
