@@ -27,7 +27,7 @@
 
   "NOTE_CREATE_ERROR_INGREDIENT_LENGTH": "The ingredient name must be 3-150 characters long.",
   "NOTE_CREATE_ERROR_INGREDIENTS_NR": "Insert atleast 1 ingredient.",
-  "NOTE_CREATE_ERROR_INGREDIENT_EXISTS": "Inserted ingredient already exists!",
+  "NOTE_CREATE_ERROR_INGREDIENT_EXISTS": "Inserted ingredient already exists.",
 
   "NOTE_MEAL_NAME_LABEL": "Name",
   "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Add new ingredient...",

@@ -77,7 +77,7 @@
       <ion-card-content>
         <ion-item id="editSymptoms" class="item-md-no-padding">
           <ion-label>{{ 'NOTE_MEAL_SYMPTOMS_LABEL' | translate }}</ion-label>
-          <ion-select multiple="true" [disabled]="symptoms.length==0" okText="{{ 'NOTE_ADD_SYMPTOMS' | translate }}" cancelText="{{ 'NOTE_CANCEL_SYMPTOMS' | translate }}"
+          <ion-select multiple="true" [disabled]="symptoms.length===0" okText="{{ 'NOTE_ADD_SYMPTOMS' | translate }}" cancelText="{{ 'NOTE_CANCEL_SYMPTOMS' | translate }}"
             formControlName="symptoms" [(ngModel)]="symptomsInNote">
             <ion-option *ngFor="let s of symptoms" ion-text color="dark">{{s.name}}</ion-option>
           </ion-select>

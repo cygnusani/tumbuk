@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavParams, ViewController, ModalController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -108,11 +108,8 @@ export class NoteCreatePage implements OnInit {
           symptoms: new FormControl(this.note.symptoms.length, {}),
           date: new FormControl(dateObject.toISOString(), {})
         });
-
         this.isReadyToSave = true;
       } else {
-        console.log('is new');
-        
         this.isNew = true;
 
         let date = new Date();
@@ -147,29 +144,15 @@ export class NoteCreatePage implements OnInit {
   }
 
   addIngredient() {
-    let parameters = { 0: this.ingredientMinLength, 1: this.ingredientMaxLength };
-    this.translate.get([
-      "ERROR_INGREDIENT_EMPTY",
-      "ERROR_INGREDIENT_LENGTH",
-      "ERROR_INGREDIENT_EXISTS"
-    ], parameters).subscribe(values => {
-      var temp = this.ingredient.trim().toLowerCase();
+    if (!this.isValidIngredient || this.insertedIngredientAlreadyExists) {
+      return;
+    }
+    
+    var temp = this.ingredient.trim().toLowerCase();
+    var ingredientName = temp.charAt(0).toUpperCase() + temp.slice(1);
       
-      var ingredientName = temp.charAt(0).toUpperCase() + temp.slice(1);
-      
-      if (ingredientName.length < this.ingredientMinLength || ingredientName.length > this.ingredientMaxLength) {
-        this.appProv.toast(values.ERROR_INGREDIENT_LENGTH, 3000, "top");
-        return;
-      }
-      
-      if (this.note.ingredients.findIndex(ing => ing.name == ingredientName) !== -1) {
-        this.appProv.toast(values.ERROR_INGREDIENT_EXISTS, 3000, "top");
-        return;
-      }
-      
-      this.note.ingredients.push({ name: ingredientName });
-      this.ingredient = '';
-    });
+    this.note.ingredients.push({ name: ingredientName });
+    this.ingredient = '';
   }
 
   insertedIngredientExists() {

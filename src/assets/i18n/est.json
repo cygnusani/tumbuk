@@ -22,11 +22,12 @@
   "NEW_NOTE_TITLE": "Uus märge",
   "EDIT_NOTE_TITLE": "Muuda märget",
 
-  "ERROR_INVALID_MEAL": "Toidu nimi peab olema {0}-{1} sümbolit pikk!",
-  "ERROR_INGREDIENT_EMPTY": "Sisestage valiidne koostisosa!",
-  "ERROR_INGREDIENT_LENGTH": "Koostisosa peab olema {0}-{1} sümbolit pikk!",
-  "ERROR_ONE_INGREDIENT": "Sisestage vähemalt {0} koostisosa!",
-  "ERROR_INGREDIENT_EXISTS": "Sisestatud koostisosa on juba olemas!",
+  "NOTE_CREATE_ERROR_REQUIRED": "See väli on nõutud.",
+  "NOTE_CREATE_ERROR_MEAL_LENGTH": "Toidu nimi peab olema 3-150 sümbolit pikk.",
+
+  "NOTE_CREATE_ERROR_INGREDIENT_LENGTH": "Koostisosa peab olema 3-150 sümbolit pikk",
+  "NOTE_CREATE_ERROR_INGREDIENTS_NR": "Sisestage vähemalt 1 koostisosa.",
+  "NOTE_CREATE_ERROR_INGREDIENT_EXISTS": "Sisestatud koostisosa on juba olemas.",
 
   "NOTE_MEAL_NAME_LABEL": "Nimi",
   "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Lisa uus koostisosa...",
