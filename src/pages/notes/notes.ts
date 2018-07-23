@@ -4,22 +4,15 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotesProvider } from '../../providers/notes/notes';
 import { AppProvider } from '../../providers/app/app';
 
-/**
- * Generated class for the NotesPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 @IonicPage()
 @Component({
   selector: 'page-notes',
   templateUrl: 'notes.html',
 })
 export class NotesPage {
-  //@ViewChild(List) list: List;
 
   notes = [];
-
   recordsLimit = 15;
 
   constructor(private appProv: AppProvider, private loadingCtrl: LoadingController, private platform: Platform, private alertCtrl: AlertController, private translate: TranslateService, private modalCtrl: ModalController, private notesProv: NotesProvider) {
@@ -29,7 +22,6 @@ export class NotesPage {
   load() {
     this.translate.get('LOADING_MESSAGE').subscribe(val => {
       let loader = this.loadingCtrl.create({
-        //spinner: "dots",
         content: val,
         duration: 5000
       });
@@ -44,15 +36,10 @@ export class NotesPage {
     });
   }
 
-  /**
-   *
-   * @param refresher
-   */
   doRefresh(refresher) {
     setTimeout(() => {
       refresher.complete();
     }, 3000);
-    //this.list.closeSlidingItems();
     this.notesProv.getAll(this.recordsLimit).then(data => {
       this.notes = data;
       refresher.complete();
@@ -73,22 +60,12 @@ export class NotesPage {
     return symptomsString;
   }
 
-  /**
-   * Prompt the user to add a new note. This shows our NoteCreatePage in a
-   * modal and then adds the new note to our data source if the user created one.
-   */
   addNote() {
-    //this.list.closeSlidingItems();
     this.translate.get("CREATE_NOTE_SUCCESS_TOAST").subscribe(val => {
       let createNoteModal = this.modalCtrl.create('NoteCreatePage');
       createNoteModal.onWillDismiss(res => {
-        //if (this.appProv.updateStatistics) {
-        //  this.load();
-        //}
         if (res) {
           this.notes.unshift(res);
-          //this.appProv.updateStatistics = true;
-
           this.appProv.toast(val, 3000, "top")
         }
       })
@@ -96,11 +73,7 @@ export class NotesPage {
     });
   }
 
-  /**
-   * Edit a note from the list of notes.
-   */
   editNote(note) {
-    //this.list.closeSlidingItems();
     this.translate.get("EDIT_NOTE_SUCCESS_TOAST").subscribe(val => {
       let createNoteModal = this.modalCtrl.create('NoteCreatePage', { note: note });
       createNoteModal.onWillDismiss(res => {
@@ -118,17 +91,14 @@ export class NotesPage {
     });
   }
 
-  /**
-   * Delete a note from the list of notes.
-   */
   deleteNote(note) {
-    //this.list.closeSlidingItems();
     this.translate.get([
       "DELETE_NOTE_ALERT_TITLE",
       "DELETE_NOTE_ALERT_MESSAGE",
       "DELETE_BUTTON",
       "CANCEL_BUTTON",
-      "DELETE_NOTE_SUCCESS_TOAST"
+      "DELETE_NOTE_SUCCESS_TOAST",
+      "ERROR_TOAST"
     ]).subscribe(values => {
       let confirm = this.alertCtrl.create({
         title: values.DELETE_NOTE_ALERT_TITLE,
@@ -145,7 +115,7 @@ export class NotesPage {
                   }
                   this.appProv.toast(values.DELETE_NOTE_SUCCESS_TOAST, 3000, "top");
                 } else {
-                  this.presentErrorToast();
+                  this.appProv.toast(values.ERROR_TOAST, 3000, "top");
                 }
               })
             }
@@ -159,11 +129,5 @@ export class NotesPage {
       });
       confirm.present();
     })
-  }
-
-  private presentErrorToast() {
-    this.translate.get("ERROR_TOAST").subscribe(val => {
-      this.appProv.toast(val, 3000, "top");
-    });
   }
 }

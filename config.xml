@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ml.tumbuk" version="0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ml.tumbuk" version="0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Tumbuk</name>
     <description>A simple app to help you discover foods and ingredients that upset your stomach</description>
     <author email="mlmakesgames@gmail.com" href="mailto:mlmakesgames@gmail.com">Martin Luik</author>

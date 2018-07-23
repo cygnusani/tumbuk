@@ -3,7 +3,6 @@ import { IonicPage, LoadingController, Platform } from 'ionic-angular';
 import { StatisticsProvider } from '../../providers/statistics/statistics';
 import { AppProvider } from '../../providers/app/app';
 import { TranslateService } from '@ngx-translate/core';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { SymptomsProvider } from '../../providers/symptoms/symptoms';
 
 
@@ -13,6 +12,7 @@ import { SymptomsProvider } from '../../providers/symptoms/symptoms';
   templateUrl: 'statistics.html',
 })
 export class StatisticsPage {
+
   statistics = [];
   symptoms = [];
   symptom: any;
@@ -22,7 +22,7 @@ export class StatisticsPage {
   tabBarElement: any;
   splash = true;
 
-  constructor(private splashScreen: SplashScreen, private appProv: AppProvider, private platform: Platform, private loadingCtrl: LoadingController, private symptomsProv: SymptomsProvider, private statisticsProv: StatisticsProvider, private translate: TranslateService) {
+  constructor(private appProv: AppProvider, private platform: Platform, private loadingCtrl: LoadingController, private symptomsProv: SymptomsProvider, private statisticsProv: StatisticsProvider, private translate: TranslateService) {
     this.tabBarElement = document.querySelector('.tabbar');
   }
 
@@ -39,7 +39,7 @@ export class StatisticsPage {
     setTimeout(() => {
       this.splash = false;
       this.tabBarElement.style.display = 'flex';
-    }, 5000);
+    }, 2900);
   }
 
   load() {

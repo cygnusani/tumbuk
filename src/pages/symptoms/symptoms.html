@@ -15,25 +15,34 @@
 </ion-header>
 
 
-<ion-content>
-  <form *ngIf="form" [formGroup]="form">
+<ion-content class="symptoms">
+  <form [formGroup]="form">
+    <!--*ngIf="form" -->
+
 
     <button hidden tappable (click)="add()"></button>
 
-    <ion-card *ngFor="let s of symptoms">
-      <ion-card-content>
-        <p ion-text color="dark" item-start>{{s.name}}</p>
-        <button item-end ion-button icon-only clear class="deleteSymptomButton" color="danger" tappable (click)="delete(s)">
-          <ion-icon name="close"></ion-icon>
-        </button>
-      </ion-card-content>
-    </ion-card>
+    <ion-list class="symptom" reorder="true" (ionItemReorder)="reorderItems($event)">
+      <ion-item class="dragable" *ngFor="let s of symptoms">
+        <ion-card>
+          <ion-card-content>
+            <p ion-text color="dark" item-start>{{s.name}}</p>
+            <button item-end ion-button icon-only clear class="deleteSymptomButton" color="danger" tappable (click)="delete(s)">
+              <ion-icon name="close"></ion-icon>
+            </button>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+    </ion-list>
 
     <ion-card>
       <ion-card-content>
         <ion-item id="addSymptomField" class="item-md-no-padding">
           <ion-label floating>{{ 'SYMPTOMS_ADD_SYMPTOM_PLACEHOLDER' | translate }}</ion-label>
-          <ion-input ion-text color="dark" type="text" formControlName="symptom" [(ngModel)]="symptom" tappable></ion-input>
+          <ion-input ion-text color="dark" type="text" formControlName="symptom" [(ngModel)]="symptom.name" tappable></ion-input>
+
+          <!--formControlName="symptom"-->
+
           <ion-fab class="customButton" item-right>
             <button ion-fab mini tappable color="pink" (click)="add()">
               <ion-icon name="add"></ion-icon>
@@ -42,6 +51,5 @@
         </ion-item>
       </ion-card-content>
     </ion-card>
-
   </form>
 </ion-content>

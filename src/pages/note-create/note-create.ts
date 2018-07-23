@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { IonicPage, NavParams, ViewController, ModalController } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { NotesProvider } from '../../providers/notes/notes';
 import { Note } from '../../models/note';
@@ -15,17 +15,28 @@ import { SymptomsProvider } from '../../providers/symptoms/symptoms';
   templateUrl: 'note-create.html',
 })
 export class NoteCreatePage implements OnInit {
+
   form: FormGroup;
 
-  isReadyToSave: boolean;
-  isNew: boolean = false;
+  validation_messages = {};
 
-  note: any;
+  isValidIngredient = false;
+  hasAtleastOneIngredient = false;
+  insertedIngredientAlreadyExists = false;
+  isReadyToSave = false;
+  isNew = false;
 
-  ingredient: string = '';
+  note;
+  ingredient = '';
+
+  mealMinLength = 3;
+  mealMaxLength = 150;
+  ingredientMinLength = 3;
+  ingredientMaxLength = 150;
 
   symptoms = [];
   symptomsInNote = [];
+  
 
   constructor(
     private appProv: AppProvider,
@@ -39,60 +50,96 @@ export class NoteCreatePage implements OnInit {
     private viewCtrl: ViewController) { }
 
   ngOnInit() {
-    // Fetch symptoms from database
-    this.symptomsProv.getAll().then(data => {
-      this.symptoms = data;
-    });
-    // Get note data from navParams
-    const n = this.navParams.get('note');
-    // If note data is present...
-    if (n) {
-      // Clear note data from navParams
-      this.navParams.data.note = null;
-      // Create copy of the note
-      this.note = new Note({ id: n.id, meal: n.meal, bad: n.bad, ingredients: [], symptoms: [], date: n.date });
-      // Copy ingredients if any
-      for (let i = 0; i < n.ingredients.length; i++) {
-        const ingredientName = n.ingredients[i].name;
-        this.note.ingredients.push({ name: ingredientName });
+    this.translate.get([
+      'NOTE_CREATE_ERROR_REQUIRED',
+      'NOTE_CREATE_ERROR_MEAL_LENGTH',
+      'NOTE_CREATE_ERROR_INGREDIENTS_NR',
+      'NOTE_CREATE_ERROR_INGREDIENT_LENGTH'
+    ]).subscribe(values => {
+      this.validation_messages = {
+        'meal': [
+          { type: 'required', message: values.NOTE_CREATE_ERROR_REQUIRED },
+          { type: 'minlength', message: values.NOTE_CREATE_ERROR_MEAL_LENGTH },
+          { type: 'maxlength', message: values.NOTE_CREATE_ERROR_MEAL_LENGTH }
+        ],
+        'ingredient': [
+          { type: 'minlength', message: values.NOTE_CREATE_ERROR_INGREDIENT_LENGTH },
+          { type: 'maxlength', message: values.NOTE_CREATE_ERROR_INGREDIENT_LENGTH }
+        ],
+        'ingredients': [
+          { type: 'min', message: values.NOTE_CREATE_ERROR_INGREDIENTS_NR },
+        ]
       }
-      // Copy symptoms if any
-      for (let i = 0; i < n.symptoms.length; i++) {
-        const symptomName = n.symptoms[i].name;
-        this.symptomsInNote.push(symptomName);
-      }
-      // Copy and froamt date
-      var dateParts = this.note.date.split("/");
-      var dateObject = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-
-      this.form = this.formBuilder.group({
-        meal: [this.note.meal, Validators.required],
-        ingredients: [this.note.ingredients],
-        symptoms: [this.note.symptoms],
-        date: [dateObject.toISOString()]
-      });
-
-      this.isReadyToSave = true;
-    }
-    // No data was sent. Is a new note
-    else {
-      this.isNew = true;
-      // Create new date and format
-      let date = new Date();
-      let latest = this.datepipe.transform(date, 'dd/MM/yyyy');
-      // Create new note
-      this.note = { id: -1, meal: '', bad: false, ingredients: [], symptoms: [], date: latest }
-      this.form = this.formBuilder.group({
-        meal: ['', Validators.required],
-        ingredients: [''],
-        symptoms: [''],
-        date: [new Date().toISOString()]
-      });
-    }
-    // Watch the form for changes
-    this.form.valueChanges.subscribe((v) => {
-      this.isReadyToSave = this.form.valid;
     });
+      
+      this.symptomsProv.getAll().then(data => {
+        this.symptoms = data;
+      });
+      const noteData = this.navParams.get('note');
+
+      if (noteData) {
+        this.navParams.data.note = null;
+        this.note = new Note({ id: noteData.id, meal: noteData.meal, bad: noteData.bad, ingredients: [], symptoms: [], date: noteData.date });
+
+        for (let i = 0; i < noteData.ingredients.length; i++) {
+          const ingredientName = noteData.ingredients[i].name;
+          this.note.ingredients.push({ name: ingredientName });
+        }
+
+        for (let i = 0; i < noteData.symptoms.length; i++) {
+          const symptomName = noteData.symptoms[i].name;
+          this.symptomsInNote.push(symptomName);
+        }
+
+        var dateParts = this.note.date.split("/");
+        var dateObject = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+
+        this.form = this.formBuilder.group({
+          meal: new FormControl(this.note.meal, Validators.compose([
+            Validators.required, 
+            Validators.minLength(this.mealMinLength), 
+            Validators.maxLength(this.mealMaxLength)
+          ])),
+          ingredient: new FormControl(this.ingredient, Validators.compose([
+            Validators.minLength(this.ingredientMinLength), 
+            Validators.maxLength(this.ingredientMaxLength)
+          ])),
+          ingredients: new FormControl(this.note.ingredients.length, Validators.min(1)),
+          symptoms: new FormControl(this.note.symptoms.length, {}),
+          date: new FormControl(dateObject.toISOString(), {})
+        });
+
+        this.isReadyToSave = true;
+      } else {
+        console.log('is new');
+        
+        this.isNew = true;
+
+        let date = new Date();
+        let latest = this.datepipe.transform(date, 'dd/MM/yyyy');
+        
+        this.note = { id: -1, meal: '', bad: false, ingredients: [], symptoms: [], date: latest }
+
+        this.form = this.formBuilder.group({
+          meal: new FormControl('', Validators.compose([
+            Validators.required, 
+            Validators.minLength(this.mealMinLength), 
+            Validators.maxLength(this.mealMaxLength)
+          ])),
+          ingredient: new FormControl('', Validators.compose([
+            Validators.minLength(this.ingredientMinLength), 
+            Validators.maxLength(this.ingredientMaxLength)
+          ])),
+          ingredients: new FormControl('', Validators.min(1)),
+          symptoms: new FormControl('', {}),
+          date: new FormControl(new Date().toISOString(), {})
+        });
+      }
+      this.form.valueChanges.subscribe((v) => {
+        this.isReadyToSave = this.form.valid  && this.note.ingredients.length > 0 && !this.insertedIngredientAlreadyExists;
+        this.isValidIngredient = this.form.get('ingredient').valid && this.ingredient.length > 0 ;
+        this.insertedIngredientAlreadyExists = this.insertedIngredientExists();
+      });
   }
 
   cancel() {
@@ -100,112 +147,86 @@ export class NoteCreatePage implements OnInit {
   }
 
   addIngredient() {
-    // Fetch translations
+    let parameters = { 0: this.ingredientMinLength, 1: this.ingredientMaxLength };
     this.translate.get([
       "ERROR_INGREDIENT_EMPTY",
+      "ERROR_INGREDIENT_LENGTH",
       "ERROR_INGREDIENT_EXISTS"
-    ]).subscribe(values => {
-      // Change inserted ingredient to lower case and trim spaces
+    ], parameters).subscribe(values => {
       var temp = this.ingredient.trim().toLowerCase();
-      // Change first letter to upper case
+      
       var ingredientName = temp.charAt(0).toUpperCase() + temp.slice(1);
-      // Present error if length is 0
-      if (ingredientName.length == 0) {
-        this.appProv.toast(values.ERROR_INGREDIENT_EMPTY, 3000, "top");
+      
+      if (ingredientName.length < this.ingredientMinLength || ingredientName.length > this.ingredientMaxLength) {
+        this.appProv.toast(values.ERROR_INGREDIENT_LENGTH, 3000, "top");
         return;
       }
-      // Present error if ingredient already exists
+      
       if (this.note.ingredients.findIndex(ing => ing.name == ingredientName) !== -1) {
         this.appProv.toast(values.ERROR_INGREDIENT_EXISTS, 3000, "top");
         return;
       }
-      // Save new ingredient
+      
       this.note.ingredients.push({ name: ingredientName });
-      // Clear new ingredient field
       this.ingredient = '';
     });
   }
 
+  insertedIngredientExists() {
+    var ingredient = this.ingredient.trim().toLowerCase();
+    var ingredientName = ingredient.charAt(0).toUpperCase() + ingredient.slice(1);
+
+    if (this.note.ingredients.findIndex(ing => ing.name == ingredientName) !== -1) {
+      return true;
+    }
+    return false;
+  }
+
   deleteIngredient(chip: Element, ingredient) {
-    // Removes chrip from chips list
     chip.remove();
-    // Remove selected ingredient from ingredients list
     this.note.ingredients.splice(this.note.ingredients.findIndex(ing => ing.name == ingredient), 1);
+    if (this.note.ingredients.length == 0) {
+      this.isReadyToSave = false;
+    }
   }
 
   editSymptoms() {
-    // Create a modal
     let createNoteModal = this.modalCtrl.create('SymptomsPage', {
-      // Send symptoms data
       symptoms: this.symptoms
     });
-    // When model will be dismissed...
     createNoteModal.onWillDismiss(() => {
-      // Array for symptoms IDs that will be removed
-      var symptomsToDeleteIds = [];
-
       for (let i = 0; i < this.symptomsInNote.length; i++) {
         var symptomInNote = this.symptomsInNote[i];
-        if (this.symptoms.findIndex(s => s.name == symptomInNote.name) == -1) {
-          symptomsToDeleteIds.push(symptomInNote.id);
+        if (this.symptoms.findIndex(s => s.name == symptomInNote) == -1) {
           this.symptomsInNote.splice(i, 1);
         }
-      }
-
-      if (symptomsToDeleteIds.length > 0) {
-        this.notesProv.deleteSymptomsConnections(symptomsToDeleteIds);
-      }
-
-      if (this.note.id != -1) {
-        this.isReadyToSave = false;
-        if (this.symptomsInNote.length == 0) {
-          this.note.bad = false;
-        }
-        this.notesProv.update(this.note).then(() => {
-          this.isReadyToSave = true;
-        });
       }
     })
     createNoteModal.present();
   }
 
   done() {
-    // Return if form is not valid
-    if (!this.form.valid) { return; }
-    // Present error if no ingredients are entered
-    if (this.note.ingredients.length == 0) {
-      this.translate.get("ERROR_ONE_INGREDIENT").subscribe(val => {
-        this.appProv.toast(val, 3000, "top");
-      });
-      return;
-    }
-    // Get meal value from form
     this.note.meal = this.form.value.meal;
-    // Write symptoms into note
+    
     for (let i = 0; i < this.symptomsInNote.length; i++) {
       const symptomName = this.symptomsInNote[i];
       const symptom = this.symptoms[this.symptoms.findIndex(s => s.name == symptomName)];
       this.note.symptoms.push({ id: symptom.id, name: symptom.name });
     }
-    // Does the note have sny symptoms?
+    
     this.note.symptoms.length > 0 ? this.note.bad = true : this.note.bad = false;
-    // Write selected date into note
+    
     var date = new Date(this.form.value.date);
     this.note.date = this.datepipe.transform(date, 'dd/MM/yyyy');
-    // Refresh statistics when viewed next time
+    
     this.appProv.refreshStatistics = true;
-    // If is a new note...
+    
     if (this.note.id != -1) {
-      // Save note to database and send note to previous view
       this.notesProv.update(this.note).then(() => {
         this.viewCtrl.dismiss(this.note);
       });
-    }
-    // Else an old note was edited
-    else {
-      // Save note to database and send note to previous view
+    } else {
       this.notesProv.insert(this.note).then(res => {
-        // Write generated ID into note
         this.note.id = res;
         this.viewCtrl.dismiss(this.note);
       });

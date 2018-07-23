@@ -11,20 +11,19 @@
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="{{ 'REFRESHER_PULLING_TEXT' | translate }}" refreshingText="{{ 'REFRESHING_TEXT' | translate }}"></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngIf="statistics.length == 0">
+  <ion-card>
     <ion-card-content class="happyCard">
-      <ion-icon name="happy" color="primary"></ion-icon>
-      <h2 ion-text color="dark">{{ 'NO_STATISTICS_MESSAGE' | translate }}</h2>
-      <p ion-text color="dark">{{ 'NO_STATISTICS_MESSAGE_2' | translate }}</p>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="statistics.length > 0">
-    <ion-card-content class="sadCard">
-      <ion-icon name="sad" color="danger"></ion-icon>
-      <h2 ion-text color="dark">{{ 'STATISTICS_MESSAGE' | translate }}</h2>
-      <p ion-text color="dark">{{ 'STATISTICS_MESSAGE_2' | translate }}</p>
-      <ion-item id="symptomsFilter" class="item-md-no-padding">
+      <div *ngIf="statistics.length == 0">
+        <ion-icon name="happy" color="primary"></ion-icon>
+        <h2 ion-text color="dark">{{ 'NO_STATISTICS_MESSAGE' | translate }}</h2>
+        <p ion-text color="dark">{{ 'NO_STATISTICS_MESSAGE_2' | translate }}</p>
+      </div>
+      <div *ngIf="statistics.length > 0">
+        <ion-icon name="sad" color="danger"></ion-icon>
+        <h2 ion-text color="dark">{{ 'STATISTICS_MESSAGE' | translate }}</h2>
+        <p ion-text color="dark">{{ 'STATISTICS_MESSAGE_2' | translate }}</p>
+      </div>
+      <ion-item *ngIf="symptoms.length > 0" class="symptomsFilter item-md-no-padding">
         <ion-label>{{ 'SYMPTOMS_FILTER_LABEL' | translate }}</ion-label>
         <ion-select okText="{{ 'APPLY_FILTER_BUTTON' | translate }}" cancelText="{{ 'CANCEL_BUTTON' | translate }}" (ionChange)="applySymtomsFilter($event)">
           <ion-option ion-text color="dark" value="" selected="true">{{ 'ALL_SYMPTOMS_RADIO' | translate }}</ion-option>

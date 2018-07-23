@@ -1,5 +1,39 @@
-p {
-  display: inline;
+.symptom {
+  max-width: 470px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dragable {
+  padding-left: 0;
+}
+
+.symptoms p {
+  display: inline-flex;
+}
+
+.symptoms .card-md {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  min-height: 1em;
+}
+
+.symptoms .list-md {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.item-md {
+  padding-left: 0;
+  max-width: 470px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0;
+
 }
 
 .customButton {
@@ -9,7 +43,7 @@ p {
 }
 
 .deleteSymptomButton {
-  margin: 0;
-    float: right;
-    position: relative;
+  margin: 0 !important;
+  float: right;
+  position: relative;
 }

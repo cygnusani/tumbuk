@@ -1,6 +1,4 @@
 // http://ionicframework.com/docs/v2/theming/
-
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -39,10 +37,12 @@ ion-footer {
   margin: 2px 2px;
 }
 
-.happyCard, .sadCard {
+.happyCard,
+.sadCard {
   text-align: center;
 }
 
-.happyCard, .sadCard ion-icon {
+.happyCard,
+.sadCard ion-icon {
   font-size: 3em;
 }

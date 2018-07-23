@@ -3,20 +3,16 @@
     <ion-title *ngIf="isNew">{{ 'NEW_NOTE_TITLE' | translate }}</ion-title>
     <ion-title *ngIf="!isNew">{{ 'EDIT_NOTE_TITLE' | translate }}</ion-title>
     <ion-buttons start showWhen="core,android,windows">
-      <button ion-button tappable (click)="cancel()">{{ 'CLOSE_BUTTON' | translate }}</button>
+      <button ion-button (click)="cancel()">{{'CLOSE_BUTTON' | translate }}</button>
     </ion-buttons>
     <ion-buttons start showWhen="ios">
-      <button ion-button tappable (click)="cancel()">
-        <span color="primary">
-          {{ 'CANCEL_BUTTON' | translate }}
-        </span>
+      <button ion-button (click)="cancel()">
+        <span color="primary">{{'CANCEL_BUTTON' | translate}}</span>
       </button>
     </ion-buttons>
     <ion-buttons end showWhen="ios">
-      <button ion-button tappable (click)="done()" [disabled]="!isReadyToSave" strong>
-        <span color="primary">
-          {{ 'DONE_BUTTON' | translate }}
-        </span>
+      <button ion-button (click)="done()" [disabled]="!isReadyToSave" strong>
+        <span color="primary">{{'DONE_BUTTON' | translate}}</span>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -29,43 +25,64 @@
       <ion-card-content>
         <ion-item class="item-md-no-padding">
           <ion-label floating>{{ 'NOTE_MEAL_NAME_LABEL' | translate }}</ion-label>
-          <ion-input type="text" ion-text color="dark" formControlName="meal" [(ngModel)]="note.meal" tappable></ion-input>
+          <ion-input type="text" formControlName="meal"></ion-input>
         </ion-item>
+        <ng-container *ngFor="let validation of validation_messages.meal" >
+          <ion-item *ngIf="form.get('meal').hasError(validation.type) && (form.get('meal').dirty || form.get('meal').touched)">
+            <p ion-text color="danger">{{ validation.message }}</p>
+          </ion-item>
+        </ng-container>
       </ion-card-content>
     </ion-card>
 
-    <button hidden tappable (click)="addIngredient()"></button>
+    <button hidden (click)="addIngredient()"></button>
 
     <ion-card>
       <ion-card-content>
         <ion-chip #chip *ngFor="let ingredient of note.ingredients">
           <ion-label>{{ingredient.name}}</ion-label>
-          <button ion-button clear color="danger" tappable (click)="deleteIngredient(chip, ingredient.name)">
+          <button ion-button clear color="danger" (click)="deleteIngredient(chip, ingredient.name)">
             <ion-icon name="close-circle"></ion-icon>
           </button>
         </ion-chip>
         <ion-item id="addIngredient" class="item-md-no-padding">
           <ion-label floating>{{ 'NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER' | translate }}</ion-label>
-          <ion-input type="text" formControlName="ingredients" [(ngModel)]="ingredient" tappable></ion-input>
+          <ion-input type="text" formControlName="ingredient" [(ngModel)]="ingredient"></ion-input>
           <ion-fab class="customButton" item-right>
-            <button ion-fab mini color="pink" tappable (click)="addIngredient()">
+            <button ion-fab mini color="pink" (click)="addIngredient()" [disabled]="!isValidIngredient || insertedIngredientAlreadyExists">
               <ion-icon name="add"></ion-icon>
             </button>
           </ion-fab>
         </ion-item>
+        <ion-input hidden formControlName="ingredients" [(ngModel)]="note.ingredients.length"></ion-input>
+        <ng-container *ngFor="let validation of validation_messages.ingredient" >
+          <ion-item *ngIf="form.get('ingredient').hasError(validation.type) && (form.get('ingredient').dirty || form.get('ingredient').touched)">
+            <p ion-text color="danger">{{ validation.message }}</p>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngFor="let validation of validation_messages.ingredients">
+          <ion-item *ngIf="form.get('ingredients').hasError(validation.type)">
+            <p ion-text color="danger">{{ validation.message }}</p>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="insertedIngredientAlreadyExists">
+          <ion-item>
+            <p ion-text color="danger">{{ 'NOTE_CREATE_ERROR_INGREDIENT_EXISTS' | translate }}</p>
+          </ion-item>
+        </ng-container>
       </ion-card-content>
     </ion-card>
-
+    
     <ion-card>
       <ion-card-content>
         <ion-item id="editSymptoms" class="item-md-no-padding">
           <ion-label>{{ 'NOTE_MEAL_SYMPTOMS_LABEL' | translate }}</ion-label>
-          <ion-select multiple="true" okText="{{ 'NOTE_ADD_SYMPTOMS' | translate }}" cancelText="{{ 'NOTE_CANCEL_SYMPTOMS' | translate }}"
-            formControlName="symptoms" tappable [(ngModel)]="symptomsInNote" okText="Okay text" cancelText="Dismiss text">
+          <ion-select multiple="true" [disabled]="symptoms.length==0" okText="{{ 'NOTE_ADD_SYMPTOMS' | translate }}" cancelText="{{ 'NOTE_CANCEL_SYMPTOMS' | translate }}"
+            formControlName="symptoms" [(ngModel)]="symptomsInNote">
             <ion-option *ngFor="let s of symptoms" ion-text color="dark">{{s.name}}</ion-option>
           </ion-select>
           <ion-fab class="customButton" item-right>
-            <button ion-fab mini tappable color="pink" (click)="editSymptoms()">
+            <button ion-fab mini color="pink" (click)="editSymptoms()">
               <ion-icon name="create"></ion-icon>
             </button>
           </ion-fab>
@@ -77,7 +94,7 @@
       <ion-card-content>
         <ion-item class="item-md-no-padding">
           <ion-label floating>{{ 'NOTE_MEAL_DATE_LABEL' | translate }}</ion-label>
-          <ion-datetime ion-text color="dark" displayFormat="DD/MM/YYYY" tappable formControlName="date"></ion-datetime>
+          <ion-datetime ion-text color="dark" displayFormat="DD/MM/YYYY" formControlName="date"></ion-datetime>
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -87,7 +104,7 @@
 
 
 <ion-footer showWhen="core,android,windows">
-  <button ion-button icon-only clear full tappable (click)="done()" [disabled]="!isReadyToSave"> <!--clear-->
+  <button ion-button icon-only clear full (click)="done()" [disabled]="!isReadyToSave">
     <ion-icon name="checkmark" color="light"></ion-icon>
   </button>
 </ion-footer>
