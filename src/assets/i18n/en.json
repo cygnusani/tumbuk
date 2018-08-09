@@ -1,34 +1,25 @@
 {
   "REFRESHER_PULLING_TEXT": "Pull to refresh",
   "REFRESHING_TEXT": "Refreshing...",
-
   "LOADING_MESSAGE": "Please wait...",
   "OK": "Ok",
-
   "STATISTICS_TITLE": "Statistics",
   "SYMPTOMS_FILTER_LABEL": "Filter by symptom",
   "ALL_SYMPTOMS_RADIO": "All",
   "APPLY_FILTER_BUTTON": "Apply",
-
   "NO_STATISTICS_MESSAGE": "No statistics",
   "NO_STATISTICS_MESSAGE_2": "This must be a good thing, right?",
-
   "STATISTICS_MESSAGE": "Oh snap!",
   "STATISTICS_MESSAGE_2": "These might be your troublemakers",
-
   "NO_NOTES_MESSAGE": "No notes",
   "NO_NOTES_MESSAGE_2": "Start by adding some from bottom right",
-
   "NEW_NOTE_TITLE": "New Note",
   "EDIT_NOTE_TITLE": "Edit Note",
-
   "NOTE_CREATE_ERROR_REQUIRED": "This field is required.",
   "NOTE_CREATE_ERROR_MEAL_LENGTH": "The meal name must be 3-150 characters long.",
-
   "NOTE_CREATE_ERROR_INGREDIENT_LENGTH": "The ingredient name must be 3-150 characters long.",
   "NOTE_CREATE_ERROR_INGREDIENTS_NR": "Insert atleast 1 ingredient.",
   "NOTE_CREATE_ERROR_INGREDIENT_EXISTS": "Inserted ingredient already exists.",
-
   "NOTE_MEAL_NAME_LABEL": "Name",
   "NOTE_MEAL_ADD_INGREDIENT_PLACEHOLDER": "Add new ingredient...",
   "NOTE_MEAL_DATE_LABEL": "Date",
@@ -36,38 +27,33 @@
   "NOTE_ADD_SYMPTOMS": "Done",
   "NOTE_CANCEL_SYMPTOMS": "Cancel",
   "CLOSE_BUTTON": "Close",
-
   "SYMPTOMS_TITLE": "Edit symptoms",
   "SYMPTOMS_DONE_BUTTON": "Done",
   "SYMPTOMS_ADD_SYMPTOM_PLACEHOLDER": "Add symptoms...",
-  "TOAST_ERROR_SYMPTOM_LENGTH": "The symptom must be {0}-{1} characters long!",
-  "TOAST_ERROR_SYMPTOM_EXISTS": "Inserted symptom already exists!",
-  "TOAST_DELETE_SYMPTOM_SUCCESS": "Symptom deleted successfully!",
+  "SYMPTOMS_ERROR_SYMPTOM_LENGTH": "The symptom must be 3-50 characters long.",
+  "SYMPTOMS_ERROR_SYMPTOM_EXISTS": "Inserted symptom already exists.",
+  "SYMPTOMS_DELETE_SYMPTOM_ALERT_TITLE": "Delete selected symptom?",
+  "SYMPTOMS_DELETE_SYMPTOM_ALERT_MESSAGE": "This action cannot be undone",
+  "SYMPTOMS_DELETE_SYMPTOM_SUCCESS": "Symptom deleted successfully.",
   "TOAST_ERROR_NOTE_DEPENDENCY": "Deletion failed! Remove all selected symptom dependencies and try again.",
-
   "DELETE_NOTE_ALERT_TITLE": "Delete selected note?",
   "DELETE_NOTE_ALERT_MESSAGE": "This action cannot be undone",
   "DELETE_BUTTON": "Delete",
   "CANCEL_BUTTON": "Cancel",
-
   "CREATE_NOTE_SUCCESS_TOAST": "Note created successfully!",
   "EDIT_NOTE_SUCCESS_TOAST": "Note edited successfully!",
   "DELETE_NOTE_SUCCESS_TOAST": "Note deleted successfully!",
   "ERROR_TOAST": "Oops! Something went wrong.",
-
   "TAB1_TITLE": "Statistics",
   "TAB2_TITLE": "Notes",
   "TAB3_TITLE": "Settings",
-
   "LANGUAGE_LABEL": "Language",
   "LANGUAGE_EST": "Estonian",
   "LANGUAGE_ENG": "English",
   "ABOUT_THIS_APP_BUTTON": "About this app",
-
   "ABOUT_TITLE": "About",
   "APP_NAME": "Tumbuk",
   "DEVELOPER": "An app by Martin Luik",
   "ABOUT_DEVELOPER": "Someone who likes creating apps in his spare time...",
-
   "FEEDBACK_LINK": "Feedback"
 }

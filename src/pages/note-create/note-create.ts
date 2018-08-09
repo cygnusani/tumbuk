@@ -36,7 +36,7 @@ export class NoteCreatePage implements OnInit {
 
   symptoms = [];
   symptomsInNote = [];
-  
+
 
   constructor(
     private appProv: AppProvider,
@@ -71,72 +71,72 @@ export class NoteCreatePage implements OnInit {
         ]
       }
     });
-      
-      this.symptomsProv.getAll().then(data => {
-        this.symptoms = data;
-      });
-      const noteData = this.navParams.get('note');
 
-      if (noteData) {
-        this.navParams.data.note = null;
-        this.note = new Note({ id: noteData.id, meal: noteData.meal, bad: noteData.bad, ingredients: [], symptoms: [], date: noteData.date });
+    this.symptomsProv.getAll().then(data => {
+      this.symptoms = data;
+    });
+    const noteData = this.navParams.get('note');
 
-        for (let i = 0; i < noteData.ingredients.length; i++) {
-          const ingredientName = noteData.ingredients[i].name;
-          this.note.ingredients.push({ name: ingredientName });
-        }
+    if (noteData) {
+      this.navParams.data.note = null;
+      this.note = new Note({ id: noteData.id, meal: noteData.meal, bad: noteData.bad, ingredients: [], symptoms: [], date: noteData.date });
 
-        for (let i = 0; i < noteData.symptoms.length; i++) {
-          const symptomName = noteData.symptoms[i].name;
-          this.symptomsInNote.push(symptomName);
-        }
-
-        var dateParts = this.note.date.split("/");
-        var dateObject = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-
-        this.form = this.formBuilder.group({
-          meal: new FormControl(this.note.meal, Validators.compose([
-            Validators.required, 
-            Validators.minLength(this.mealMinLength), 
-            Validators.maxLength(this.mealMaxLength)
-          ])),
-          ingredient: new FormControl(this.ingredient, Validators.compose([
-            Validators.minLength(this.ingredientMinLength), 
-            Validators.maxLength(this.ingredientMaxLength)
-          ])),
-          ingredients: new FormControl(this.note.ingredients.length, Validators.min(1)),
-          symptoms: new FormControl(this.note.symptoms.length, {}),
-          date: new FormControl(dateObject.toISOString(), {})
-        });
-        this.isReadyToSave = true;
-      } else {
-        this.isNew = true;
-
-        let date = new Date();
-        let latest = this.datepipe.transform(date, 'dd/MM/yyyy');
-        
-        this.note = { id: -1, meal: '', bad: false, ingredients: [], symptoms: [], date: latest }
-
-        this.form = this.formBuilder.group({
-          meal: new FormControl('', Validators.compose([
-            Validators.required, 
-            Validators.minLength(this.mealMinLength), 
-            Validators.maxLength(this.mealMaxLength)
-          ])),
-          ingredient: new FormControl('', Validators.compose([
-            Validators.minLength(this.ingredientMinLength), 
-            Validators.maxLength(this.ingredientMaxLength)
-          ])),
-          ingredients: new FormControl('', Validators.min(1)),
-          symptoms: new FormControl('', {}),
-          date: new FormControl(new Date().toISOString(), {})
-        });
+      for (let i = 0; i < noteData.ingredients.length; i++) {
+        const ingredientName = noteData.ingredients[i].name;
+        this.note.ingredients.push({ name: ingredientName });
       }
-      this.form.valueChanges.subscribe((v) => {
-        this.isReadyToSave = this.form.valid  && this.note.ingredients.length > 0 && !this.insertedIngredientAlreadyExists;
-        this.isValidIngredient = this.form.get('ingredient').valid && this.ingredient.length > 0 ;
-        this.insertedIngredientAlreadyExists = this.insertedIngredientExists();
+
+      for (let i = 0; i < noteData.symptoms.length; i++) {
+        const symptomName = noteData.symptoms[i].name;
+        this.symptomsInNote.push(symptomName);
+      }
+
+      var dateParts = this.note.date.split("/");
+      var dateObject = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+
+      this.form = this.formBuilder.group({
+        meal: new FormControl(this.note.meal, Validators.compose([
+          Validators.required,
+          Validators.minLength(this.mealMinLength),
+          Validators.maxLength(this.mealMaxLength)
+        ])),
+        ingredient: new FormControl(this.ingredient, Validators.compose([
+          Validators.minLength(this.ingredientMinLength),
+          Validators.maxLength(this.ingredientMaxLength)
+        ])),
+        ingredients: new FormControl(this.note.ingredients.length, Validators.min(1)),
+        symptoms: new FormControl(this.note.symptoms.length, {}),
+        date: new FormControl(dateObject.toISOString(), {})
       });
+      this.isReadyToSave = true;
+    } else {
+      this.isNew = true;
+
+      let date = new Date();
+      let latest = this.datepipe.transform(date, 'dd/MM/yyyy');
+
+      this.note = { id: -1, meal: '', bad: false, ingredients: [], symptoms: [], date: latest }
+
+      this.form = this.formBuilder.group({
+        meal: new FormControl('', Validators.compose([
+          Validators.required,
+          Validators.minLength(this.mealMinLength),
+          Validators.maxLength(this.mealMaxLength)
+        ])),
+        ingredient: new FormControl('', Validators.compose([
+          Validators.minLength(this.ingredientMinLength),
+          Validators.maxLength(this.ingredientMaxLength)
+        ])),
+        ingredients: new FormControl('', Validators.min(1)),
+        symptoms: new FormControl('', {}),
+        date: new FormControl(new Date().toISOString(), {})
+      });
+    }
+    this.form.valueChanges.subscribe((v) => {
+      this.isReadyToSave = this.form.valid && this.note.ingredients.length > 0 && !this.insertedIngredientAlreadyExists;
+      this.isValidIngredient = this.form.get('ingredient').valid && this.ingredient.length > 0;
+      this.insertedIngredientAlreadyExists = this.insertedIngredientExists();
+    });
   }
 
   cancel() {
@@ -147,10 +147,10 @@ export class NoteCreatePage implements OnInit {
     if (!this.isValidIngredient || this.insertedIngredientAlreadyExists) {
       return;
     }
-    
+
     var temp = this.ingredient.trim().toLowerCase();
     var ingredientName = temp.charAt(0).toUpperCase() + temp.slice(1);
-      
+
     this.note.ingredients.push({ name: ingredientName });
     this.ingredient = '';
   }
@@ -190,20 +190,23 @@ export class NoteCreatePage implements OnInit {
 
   done() {
     this.note.meal = this.form.value.meal;
-    
+
     for (let i = 0; i < this.symptomsInNote.length; i++) {
       const symptomName = this.symptomsInNote[i];
       const symptom = this.symptoms[this.symptoms.findIndex(s => s.name == symptomName)];
       this.note.symptoms.push({ id: symptom.id, name: symptom.name });
     }
-    
+
     this.note.symptoms.length > 0 ? this.note.bad = true : this.note.bad = false;
-    
+
     var date = new Date(this.form.value.date);
+    console.log(date);
+
     this.note.date = this.datepipe.transform(date, 'dd/MM/yyyy');
-    
+    console.log(this.note.date);
+
     this.appProv.refreshStatistics = true;
-    
+
     if (this.note.id != -1) {
       this.notesProv.update(this.note).then(() => {
         this.viewCtrl.dismiss(this.note);

@@ -93,4 +93,19 @@ export class SymptomsProvider {
       console.log("Error: ", err);
     });
   }
+
+  symptomHasConnection(symptomId): Promise<boolean> {
+    return new Promise(resolve => {
+      let sql = 'SELECT count(id) count FROM symptom_in_meal WHERE symptom_id=?';
+      this.db.executeSql(sql, [symptomId]).then(res => {
+        if (res.rows.item(0).count > 0) {
+          return resolve(true);
+        }
+        return resolve(false);
+      }).catch(err => {
+        console.log(err);
+        return resolve(false);
+      });
+    });
+  }
 }

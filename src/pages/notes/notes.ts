@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, ModalController, AlertController, List, Platform, LoadingController } from 'ionic-angular';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { IonicPage, ModalController, AlertController, LoadingController, Content } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { NotesProvider } from '../../providers/notes/notes';
 import { AppProvider } from '../../providers/app/app';
@@ -10,62 +10,106 @@ import { AppProvider } from '../../providers/app/app';
   selector: 'page-notes',
   templateUrl: 'notes.html',
 })
-export class NotesPage {
+export class NotesPage implements OnInit {
+  @ViewChild(Content) content: Content;
 
   notes = [];
-  recordsLimit = 15;
 
-  constructor(private appProv: AppProvider, private loadingCtrl: LoadingController, private platform: Platform, private alertCtrl: AlertController, private translate: TranslateService, private modalCtrl: ModalController, private notesProv: NotesProvider) {
-    this.load();
+  orderBy = 'noteId';
+  nrOfNotes = 5;
+  notesLimit = 5;
+
+  numberOfNotesInDb;
+  hideInfiniteScroll = false;
+
+
+  constructor(private appProv: AppProvider,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
+    private translate: TranslateService,
+    private modalCtrl: ModalController,
+    private notesProv: NotesProvider) { }
+
+  ngOnInit(): void {
+
+    this.loadNotes(true);
+    this.getNrOfNotesInDb();
   }
 
-  load() {
-    this.translate.get('LOADING_MESSAGE').subscribe(val => {
-      let loader = this.loadingCtrl.create({
-        content: val,
-        duration: 5000
-      });
-      loader.present();
-      this.platform.ready().then(() => {
-        this.notesProv.getAll(this.recordsLimit).then(data => {
-          this.notes = data;
-          this.appProv.updateNotes = false;
+  /* Infinite scroll */
+  doInfinite(infiniteScroll) {
+    if (this.notes.length === this.numberOfNotesInDb) {
+      return;
+    }
+    setTimeout(() => {
+      this.nrOfNotes += this.notesLimit;
+      // this.notesRowEnd += this.notesLimit;
+      this.getNotesBetweenRows(this.orderBy, this.nrOfNotes).then(infiniteScroll.complete());
+    }, 1000);
+  }
+
+  loadNotes(showLoader: boolean): Promise<boolean> {
+    return new Promise(resolve => {
+      this.translate.get('LOADING_MESSAGE').subscribe(val => {
+        let loader = this.loadingCtrl.create({
+          content: val,
+          duration: 5000
+        });
+        showLoader === true ? loader.present() : null;
+        this.getNrOfNotesInDb();
+        this.getNotesBetweenRows(this.orderBy, this.nrOfNotes).then(() => {
           loader.dismiss();
-        })
-      })
+          this.notes.length === this.numberOfNotesInDb ? this.hideInfiniteScroll = true : this.hideInfiniteScroll = false;
+          return resolve(true);
+        });
+      });
+    });
+  }
+
+  /* Loading notes data */
+  getNrOfNotesInDb(): Promise<boolean> {
+    return new Promise(resolve => {
+      this.notesProv.getNrOfNotesInDb().then(result => {
+        this.numberOfNotesInDb = result;
+        this.notes.length === this.numberOfNotesInDb ? this.hideInfiniteScroll = true : this.hideInfiniteScroll = false;
+        return resolve(true);
+      });
+    });
+  }
+
+  getNotesBetweenRows(orderBy, rowsLimit): Promise<boolean> {
+    return new Promise(resolve => {
+      this.notesProv.getNotesBetweenRows(orderBy, rowsLimit).then(data => {
+        console.log(data);
+        this.notes = data;
+        this.appProv.updateNotes = false;
+        this.notes.length === this.numberOfNotesInDb ? this.hideInfiniteScroll = true : this.hideInfiniteScroll = false;
+        return resolve(true);
+      });
+    });
+  }
+
+  scrollToTop(): Promise<any> {
+    return new Promise(resolve => {
+      this.content.scrollToTop().then(() => {
+        return resolve(true);
+      });
     });
   }
 
   doRefresh(refresher) {
     setTimeout(() => {
-      refresher.complete();
-    }, 3000);
-    this.notesProv.getAll(this.recordsLimit).then(data => {
-      this.notes = data;
-      refresher.complete();
-    })
-  }
-
-  noteSymptoms(note: any): string {
-    var symptomsString = '';
-    if (note.symptoms.length > 0) {
-      for (let i = 0; i < note.symptoms.length; i++) {
-        const symptom = note.symptoms[i];
-        symptomsString += symptom.name;
-        if (i < note.symptoms.length - 1) {
-          symptomsString += ', ';
-        }
-      }
-    }
-    return symptomsString;
+      this.loadNotes(false).then(refresher.complete());
+    }, 1000);
   }
 
   addNote() {
     this.translate.get("CREATE_NOTE_SUCCESS_TOAST").subscribe(val => {
       let createNoteModal = this.modalCtrl.create('NoteCreatePage');
-      createNoteModal.onWillDismiss(res => {
-        if (res) {
-          this.notes.unshift(res);
+      createNoteModal.onWillDismiss(result => {
+        if (result) {
+          this.numberOfNotesInDb++;
+          this.notes.unshift(result);
           this.appProv.toast(val, 3000, "top")
         }
       })
@@ -84,7 +128,7 @@ export class NotesPage {
         }
         if (this.appProv.updateNotes) {
           this.appProv.updateNotes = false;
-          this.load();
+          this.loadNotes(false);
         }
       });
       createNoteModal.present();
@@ -107,9 +151,10 @@ export class NotesPage {
           {
             text: values.DELETE_BUTTON,
             handler: () => {
-              this.notesProv.delete(note).then(res => {
-                if (res == -1) {
+              this.notesProv.delete(note).then(result => {
+                if (result == -1) {
                   this.notes.splice(this.notes.indexOf(note), 1);
+                  this.numberOfNotesInDb--;
                   if (note.symptoms.length > 0) {
                     this.appProv.refreshStatistics = true;
                   }

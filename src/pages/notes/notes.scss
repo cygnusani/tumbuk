@@ -1,6 +1,6 @@
-ion-item-sliding .item {
-  padding: 0;
-}
+// ion-item-sliding .item {
+//   padding: 0;
+// }
 
 .list-md .item-block .item-inner {
   border-bottom: 0;
@@ -41,17 +41,52 @@ ion-item-sliding .item {
 }
 
 .cards {
-  padding-bottom: 5em;
+  padding-bottom: 6em;
 }
 
 .card-md h2 {
   margin-left: 0.6em;
 }
 
-.editNoteButton {
-  float: right;
+.note-card-delete-btn {
+  position: inherit;
+  float: right
 }
 
-.deleteNoteButton {
-  float: right;
+.note-card-edit-btn {
+  position: inherit;
+  float: right
+}
+
+.note-card-symptoms {
+  display: inline-flex;
+  padding-left: 16px;
+  padding-right: 6em;
+  margin-top: 1em;
+}
+
+.note-card-content {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+// ion-card-content {
+//   padding-left: .55em;
+//   padding-top: .5em;
+//   padding-bottom: .5em;
+//   padding-right: 0;
+// }
+
+// ion-card-content ion-item {
+//   height: 1em;
+//   padding-left: .3em;
+//   padding-right: .8em;
+// }
+
+#scroll-to-top-btn {
+  position: fixed;
+  margin: .5em;
+  bottom: 4em;
+  left: 0;
+  z-index: 2;
 }

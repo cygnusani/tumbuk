@@ -27,7 +27,7 @@
           <ion-label floating>{{ 'NOTE_MEAL_NAME_LABEL' | translate }}</ion-label>
           <ion-input type="text" formControlName="meal"></ion-input>
         </ion-item>
-        <ng-container *ngFor="let validation of validation_messages.meal" >
+        <ng-container *ngFor="let validation of validation_messages.meal">
           <ion-item *ngIf="form.get('meal').hasError(validation.type) && (form.get('meal').dirty || form.get('meal').touched)">
             <p ion-text color="danger">{{ validation.message }}</p>
           </ion-item>
@@ -55,7 +55,7 @@
           </ion-fab>
         </ion-item>
         <ion-input hidden formControlName="ingredients" [(ngModel)]="note.ingredients.length"></ion-input>
-        <ng-container *ngFor="let validation of validation_messages.ingredient" >
+        <ng-container *ngFor="let validation of validation_messages.ingredient">
           <ion-item *ngIf="form.get('ingredient').hasError(validation.type) && (form.get('ingredient').dirty || form.get('ingredient').touched)">
             <p ion-text color="danger">{{ validation.message }}</p>
           </ion-item>
@@ -72,7 +72,7 @@
         </ng-container>
       </ion-card-content>
     </ion-card>
-    
+
     <ion-card>
       <ion-card-content>
         <ion-item id="editSymptoms" class="item-md-no-padding">

@@ -2,10 +2,10 @@
   <ion-navbar color="primary">
     <ion-title>{{ 'SYMPTOMS_TITLE' | translate }}</ion-title>
     <ion-buttons start showWhen="core,android,windows">
-      <button ion-button tappable (click)="done()" [disabled]="!saved">{{ 'SYMPTOMS_DONE_BUTTON' | translate }}</button>
+      <button ion-button (click)="done()" [disabled]="!saved">{{ 'SYMPTOMS_DONE_BUTTON' | translate }}</button>
     </ion-buttons>
     <ion-buttons start showWhen="ios">
-      <button ion-button tappable (click)="done()" [disabled]="!saved">
+      <button ion-button (click)="done()" [disabled]="!saved">
         <span color="primary">
           {{ 'SYMPTOMS_DONE_BUTTON' | translate }}
         </span>
@@ -17,17 +17,15 @@
 
 <ion-content class="symptoms">
   <form [formGroup]="form">
-    <!--*ngIf="form" -->
 
-
-    <button hidden tappable (click)="add()"></button>
+    <button hidden (click)="add()" [disabled]="!isValidSymptom || insertedSymptomAlreadyExists"></button>
 
     <ion-list class="symptom" reorder="true" (ionItemReorder)="reorderItems($event)">
       <ion-item class="dragable" *ngFor="let s of symptoms">
         <ion-card>
           <ion-card-content>
             <p ion-text color="dark" item-start>{{s.name}}</p>
-            <button item-end ion-button icon-only clear class="deleteSymptomButton" color="danger" tappable (click)="delete(s)">
+            <button item-end ion-button icon-only clear class="deleteSymptomButton" color="danger" (click)="delete(s)" [disabled]="!s.canDelete">
               <ion-icon name="close"></ion-icon>
             </button>
           </ion-card-content>
@@ -39,16 +37,25 @@
       <ion-card-content>
         <ion-item id="addSymptomField" class="item-md-no-padding">
           <ion-label floating>{{ 'SYMPTOMS_ADD_SYMPTOM_PLACEHOLDER' | translate }}</ion-label>
-          <ion-input ion-text color="dark" type="text" formControlName="symptom" [(ngModel)]="symptom.name" tappable></ion-input>
-
-          <!--formControlName="symptom"-->
+          <ion-input ion-text color="dark" type="text" formControlName="symptom" [(ngModel)]="symptom.name"></ion-input>
 
           <ion-fab class="customButton" item-right>
-            <button ion-fab mini tappable color="pink" (click)="add()">
+            <button ion-fab mini color="pink" (click)="add()" [disabled]="!isValidSymptom || insertedSymptomAlreadyExists">
               <ion-icon name="add"></ion-icon>
             </button>
           </ion-fab>
         </ion-item>
+
+        <ng-container *ngFor="let validation of validation_messages.symptom">
+          <ion-item *ngIf="form.get('symptom').hasError(validation.type) && (form.get('symptom').dirty || form.get('symptom').touched)">
+            <p ion-text color="danger">{{ validation.message }}</p>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="insertedSymptomAlreadyExists">
+          <ion-item>
+            <p ion-text color="danger">{{ 'SYMPTOMS_ERROR_SYMPTOM_EXISTS' | translate }}</p>
+          </ion-item>
+        </ng-container>
       </ion-card-content>
     </ion-card>
   </form>
