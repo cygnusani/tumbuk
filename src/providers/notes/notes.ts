@@ -202,8 +202,7 @@ export class NotesProvider {
     return new Promise(resolve => {
       let sql = 'SELECT n.id noteId, n.meal noteMeal, n.bad noteBad, n.date noteDate, i.id ingredientId, i.name ingredientName, s.id symptomId, s.name symptomName, s.order_nr symptomOrderNr FROM note n JOIN ingredient i ON i.id = iim.ingredient_id JOIN symptom s ON s.id = sim.symptom_id JOIN ingredient_in_meal iim ON iim.note_id = n.id JOIN symptom_in_meal sim ON sim.note_id = n.id WHERE n.bad = "true" UNION SELECT n_.id noteId, n_.meal noteMeal, n_.bad noteBad, n_.date noteDate, i_.id ingredientId, i_.name ingredientName, null AS symptomId, null AS symptomName, null AS symptomOrderNr FROM note n_ JOIN ingredient i_ ON i_.id = iim_.ingredient_id JOIN ingredient_in_meal iim_ ON n_.id = iim_.note_id WHERE n_.bad = "false"';
       this.db.executeSql(sql, []).then(res => {
-        let notes = this.temp(res);
-        return resolve(notes.slice(0, rowsLimit));
+        return resolve(this.getNotesFromResults(res, rowsLimit));
       }).catch(err => {
         console.log("Error: ", err);
       });
@@ -276,14 +275,17 @@ export class NotesProvider {
     });
   }
 
-  temp(res) {
+  getNotesFromResults(result, maxNrOfNotes) {
     let notes = [];
-    if (res.rows.length > 0) {
+    if (result.rows.length > 0) {
       let note = new Note({ id: null, meal: null, bad: null, ingredients: [], symptoms: [], date: null });
-      for (let index = 0; index < res.rows.length; index++) {
-        const element = res.rows.item(index);
+      for (let index = 0; index < result.rows.length; index++) {
+        const element = result.rows.item(index);
         if (element.noteId !== note.id) {
           if (note.id !== null) {
+            if (notes.length === maxNrOfNotes - 1) {
+              break;
+            }
             notes.push(note);
           }
           note = new Note({

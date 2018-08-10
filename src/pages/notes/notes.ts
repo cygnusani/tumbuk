@@ -36,14 +36,12 @@ export class NotesPage implements OnInit {
     this.getNrOfNotesInDb();
   }
 
-  /* Infinite scroll */
   doInfinite(infiniteScroll) {
     if (this.notes.length === this.numberOfNotesInDb) {
       return;
     }
     setTimeout(() => {
       this.nrOfNotes += this.notesLimit;
-      // this.notesRowEnd += this.notesLimit;
       this.getNotesBetweenRows(this.orderBy, this.nrOfNotes).then(infiniteScroll.complete());
     }, 1000);
   }
@@ -58,7 +56,9 @@ export class NotesPage implements OnInit {
         showLoader === true ? loader.present() : null;
         this.getNrOfNotesInDb();
         this.getNotesBetweenRows(this.orderBy, this.nrOfNotes).then(() => {
-          loader.dismiss();
+          setTimeout(() => {
+            loader.dismiss();
+          }, 1000);
           this.notes.length === this.numberOfNotesInDb ? this.hideInfiniteScroll = true : this.hideInfiniteScroll = false;
           return resolve(true);
         });
@@ -66,7 +66,6 @@ export class NotesPage implements OnInit {
     });
   }
 
-  /* Loading notes data */
   getNrOfNotesInDb(): Promise<boolean> {
     return new Promise(resolve => {
       this.notesProv.getNrOfNotesInDb().then(result => {
