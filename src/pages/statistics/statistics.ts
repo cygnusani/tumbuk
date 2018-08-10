@@ -15,7 +15,7 @@ export class StatisticsPage {
 
   statistics = [];
   symptoms = [];
-  symptom: any;
+  // symptom: any;
 
   symptomsFilter = [];
 
@@ -45,39 +45,44 @@ export class StatisticsPage {
   load() {
     this.translate.get('LOADING_MESSAGE').subscribe(val => {
       let loader = this.loadingCtrl.create({
-        //spinner: "dots",
-        content: "Please wait...",
+        content: val,
         duration: 5000
       });
       if (!this.splash) {
         loader.present();
       }
-      this.symptomsProv.getAll().then(data => {
-        this.symptoms = data;
-      }).then(() => {
+      Promise.all([
+        this.symptomsProv.getAll().then(data => {
+          this.symptoms = data;
+        }),
         this.statisticsProv.getAll(this.symptomsFilter).then(data => {
           this.statistics = data;
+        })
+      ]).then(() => {
+        setTimeout(() => {
           loader.dismiss();
-        });
+        }, 1000);
       });
     });
   }
 
   doRefresh(refresher) {
-    setTimeout(() => {
-      refresher.complete();
-    }, 5000);
-    this.symptomsProv.getAll().then(data => {
-      this.symptoms = data;
-    }).then(() => {
+    Promise.all([
+      this.symptomsProv.getAll().then(data => {
+        this.symptoms = data;
+      }),
       this.statisticsProv.getAll(this.symptomsFilter).then(data => {
         this.statistics = data;
+      })
+    ]).then(() => {
+      setTimeout(() => {
         refresher.complete();
-      });
+      }, 1000);
     });
   }
 
   applySymtomsFilter(s): void {
+    console.log(s);
     this.symptomsFilter = s;
     this.load();
   }

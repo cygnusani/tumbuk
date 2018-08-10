@@ -12,22 +12,22 @@
   </ion-refresher>
 
   <ion-card>
-    <ion-card-content class="happyCard">
-      <div *ngIf="statistics.length == 0">
+    <ion-card-content class="card-content-happy-sad">
+      <div *ngIf="statistics.length === 0">
         <ion-icon name="happy" color="primary"></ion-icon>
-        <h2 ion-text color="dark">{{ 'NO_STATISTICS_MESSAGE' | translate }}</h2>
-        <p ion-text color="dark">{{ 'NO_STATISTICS_MESSAGE_2' | translate }}</p>
+        <h2>{{ 'NO_STATISTICS_MESSAGE' | translate }}</h2>
+        <p>{{ 'NO_STATISTICS_MESSAGE_2' | translate }}</p>
       </div>
       <div *ngIf="statistics.length > 0">
         <ion-icon name="sad" color="danger"></ion-icon>
-        <h2 ion-text color="dark">{{ 'STATISTICS_MESSAGE' | translate }}</h2>
-        <p ion-text color="dark">{{ 'STATISTICS_MESSAGE_2' | translate }}</p>
+        <h2>{{ 'STATISTICS_MESSAGE' | translate }}</h2>
+        <p>{{ 'STATISTICS_MESSAGE_2' | translate }}</p>
       </div>
-      <ion-item *ngIf="symptoms.length > 0" class="symptomsFilter item-md-no-padding">
+      <ion-item *ngIf="symptoms.length > 0" class="symptoms-filter item-md-no-padding">
         <ion-label>{{ 'SYMPTOMS_FILTER_LABEL' | translate }}</ion-label>
         <ion-select okText="{{ 'APPLY_FILTER_BUTTON' | translate }}" cancelText="{{ 'CANCEL_BUTTON' | translate }}" (ionChange)="applySymtomsFilter($event)">
-          <ion-option ion-text color="dark" value="" selected="true">{{ 'ALL_SYMPTOMS_RADIO' | translate }}</ion-option>
-          <ion-option ion-text color="dark" *ngFor="let s of symptoms" value="{{s.name}}">{{s.name}}</ion-option>
+          <ion-option selected="true" value="">{{ 'ALL_SYMPTOMS_RADIO' | translate }}</ion-option>
+          <ion-option *ngFor="let s of symptoms" value="{{s.name}}">{{s.name}}</ion-option>
         </ion-select>
       </ion-item>
     </ion-card-content>
@@ -35,14 +35,14 @@
 
   <ion-card *ngFor="let stat of statistics">
     <ion-card-content>
-      <ion-fab class="rank">
+      <ion-fab class="number-of-occurrences">
         <div ion-fab mini *ngIf="statistics.indexOf(stat)==0" color="danger">{{stat.count}}</div>
         <div ion-fab mini [hidden]="statistics.length < 2" *ngIf="statistics.indexOf(stat)==1" color="danger_2">{{stat.count}}</div>
         <div ion-fab mini [hidden]="statistics.length < 3" *ngIf="statistics.indexOf(stat)==2" color="danger_3">{{stat.count}}</div>
         <div ion-fab mini [hidden]="statistics.length < 4" *ngIf="statistics.indexOf(stat)>=3" color="primary">{{stat.count}}</div>
       </ion-fab>
       <ion-chip *ngFor="let ingredient of stat.ingredients">
-        <ion-label ion-text color="dark">{{ingredient}}</ion-label>
+        <ion-label>{{ingredient}}</ion-label>
       </ion-chip>
     </ion-card-content>
   </ion-card>

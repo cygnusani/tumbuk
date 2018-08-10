@@ -97,9 +97,11 @@ export class NotesPage implements OnInit {
   }
 
   doRefresh(refresher) {
-    setTimeout(() => {
-      this.loadNotes(false).then(refresher.complete());
-    }, 1000);
+    this.loadNotes(false).then(() => {
+      setTimeout(() => {
+        refresher.complete()
+      }, 1000);
+    });
   }
 
   addNote() {

@@ -6,7 +6,7 @@ import { Stat } from '../../models/stat';
 
 @Injectable()
 export class StatisticsProvider {
-  
+
   private db: SQLiteObject;
   public isOpen: boolean;
 
@@ -23,6 +23,7 @@ export class StatisticsProvider {
   }
 
   getAll(symptom: any): Promise<any> {
+    console.log(symptom);
     return new Promise(resolve => {
       let sql = '';
       var params: any;

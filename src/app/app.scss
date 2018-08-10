@@ -35,15 +35,13 @@ ion-footer {
 
 .chip-md {
   margin-right: .25em;
-  margin-bottom: .25em; 
+  margin-bottom: .25em;
 }
 
-.happyCard,
-.sadCard {
+.card-content-happy-sad {
   text-align: center;
 }
 
-.happyCard,
-.sadCard ion-icon {
+.card-content-happy-sad ion-icon {
   font-size: 3em;
 }
